@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Entrar - Delibera</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%23fff' stroke='%231e3a5f' stroke-width='2'/%3E%3Crect x='9' y='9' width='16' height='4' rx='2' fill='%23f97316'/%3E%3Crect x='9' y='16' width='22' height='4' rx='2' fill='%233b82f6'/%3E%3Crect x='9' y='23' width='22' height='4' rx='2' fill='%2310b981'/%3E%3Crect x='9' y='30' width='14' height='4' rx='2' fill='%231e3a5f'/%3E%3C/svg%3E">
+  <meta property="og:title" content="Delibera - Acesso da Coordenação">
+  <meta property="og:description" content="Entre na plataforma de gestão de solicitações acadêmicas.">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+  <style>
+    :root {
+      --navy: #1e3a5f;
+      --accent: #f97316;
+      --accent-hover: #ea580c;
+      --accent-light: rgba(249, 115, 22, 0.10);
+      --accent-glow: rgba(249, 115, 22, 0.25);
+      --success: #10b981;
+      --bg-white: #ffffff;
+      --bg-warm: #faf8f6;
+      --border: #e2e8f0;
+      --text: #1e293b;
+      --text-muted: #64748b;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg-warm);
+      color: var(--text);
+    }
+
+    /* ── Layout ──────────────────────────── */
+    .login-wrapper {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .login-form-panel {
+      flex: 1 1 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2.5rem;
+      background: var(--bg-white);
+      position: relative;
+      z-index: 2;
+    }
+
+    .login-brand-panel {
+      flex: 1 1 50%;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem;
+      overflow: hidden;
+      background: linear-gradient(135deg, #fff7ed 0%, #fef3e2 25%, #fde8d0 50%, #e0f0ff 100%);
+    }
+
+    /* ── Curved separator ──────────────── */
+    .login-brand-panel::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -60px;
+      width: 120px;
+      height: 100%;
+      background: var(--bg-white);
+      border-radius: 0 80px 80px 0 / 0 50% 50% 0;
+      z-index: 1;
+    }
+
+    /* ── Decorative shapes ─────────────── */
+    .brand-decor {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.12;
+      pointer-events: none;
+    }
+    .brand-decor-1 {
+      width: 300px; height: 300px;
+      background: var(--accent);
+      top: -80px; right: -60px;
+    }
+    .brand-decor-2 {
+      width: 180px; height: 180px;
+      background: #3b82f6;
+      bottom: -40px; left: 40px;
+    }
+    .brand-decor-3 {
+      width: 80px; height: 80px;
+      background: var(--accent);
+      top: 50%; right: 30%;
+      opacity: 0.08;
+    }
+    .brand-dots {
+      position: absolute;
+      bottom: 60px;
+      right: 50px;
+      display: grid;
+      grid-template-columns: repeat(5, 8px);
+      gap: 10px;
+      opacity: 0.15;
+    }
+    .brand-dots span {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--navy);
+    }
+
+    /* ── Form panel content ─────────────── */
+    .form-container {
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-decoration: none;
+      margin-bottom: 2rem;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--accent); }
+    .back-link i { font-size: 1rem; }
+
+    .form-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 0.5rem;
+    }
+    .form-logo svg { width: 38px; height: 38px; }
+    .form-logo span {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--navy);
+      letter-spacing: -0.5px;
+    }
+
+    .form-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin: 1.25rem 0 0.35rem;
+    }
+
+    .form-subtitle {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      line-height: 1.5;
+    }
+
+    /* ── Social buttons ────────────────── */
+    .social-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .btn-social {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      background: var(--bg-white);
+      font-family: inherit;
+      font-size: 0.925rem;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .btn-social:hover {
+      border-color: #cbd5e1;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      transform: translateY(-1px);
+      color: var(--text);
+    }
+    .btn-social svg { flex-shrink: 0; }
+
+    /* ── Divider ───────────────────────── */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 1.5rem 0;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── Form fields ───────────────────── */
+    .input-group-custom {
+      position: relative;
+      margin-bottom: 1rem;
+    }
+
+    .input-group-custom label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.4rem;
+    }
+
+    .input-icon-wrapper {
+      position: relative;
+    }
+
+    .input-icon-wrapper i {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.1rem;
+      color: #94a3b8;
+      pointer-events: none;
+      transition: color 0.2s;
+    }
+
+    .input-icon-wrapper input {
+      width: 100%;
+      padding: 14px 16px 14px 48px;
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      color: var(--text);
+      background: var(--bg-white);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .input-icon-wrapper input::placeholder {
+      color: #b0bec5;
+    }
+
+    .input-icon-wrapper input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px var(--accent-glow);
+    }
+
+    .input-icon-wrapper input:focus + i,
+    .input-icon-wrapper input:focus ~ i {
+      color: var(--accent);
+    }
+
+    /* Fix: icon color on focus (icon comes before input in DOM) */
+    .input-icon-wrapper:focus-within i {
+      color: var(--accent);
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      padding: 4px;
+      font-size: 1.1rem;
+      transition: color 0.2s;
+      pointer-events: auto;
+    }
+    .toggle-password:hover { color: var(--text-muted); }
+
+    /* ── Extras row ────────────────────── */
+    .form-extras {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 0.25rem 0 1.75rem;
+    }
+
+    .form-check-custom {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      cursor: pointer;
+    }
+
+    .form-check-custom input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      border: 1.5px solid var(--border);
+      border-radius: 5px;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+
+    .form-check-custom span {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      user-select: none;
+    }
+
+    .forgot-link {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--accent);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .forgot-link:hover { color: var(--accent-hover); }
+
+    /* ── Submit button ─────────────────── */
+    .btn-submit {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      width: 100%;
+      padding: 0.9rem;
+      border: none;
+      border-radius: 14px;
+      background: var(--accent);
+      color: #fff;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 14px rgba(249, 115, 22, 0.3);
+    }
+    .btn-submit:hover {
+      background: var(--accent-hover);
+      box-shadow: 0 6px 20px rgba(249, 115, 22, 0.4);
+      transform: translateY(-1px);
+    }
+    .btn-submit:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 8px rgba(249, 115, 22, 0.3);
+    }
+
+    /* ── Footer link ───────────────────── */
+    .form-footer {
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+    .form-footer a {
+      color: var(--accent);
+      font-weight: 600;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .form-footer a:hover { color: var(--accent-hover); }
+
+    /* ── Brand panel content ───────────── */
+    .brand-content {
+      position: relative;
+      z-index: 2;
+      max-width: 380px;
+    }
+
+    .brand-logo-large {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+    .brand-logo-large svg { width: 52px; height: 52px; }
+    .brand-logo-large span {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--navy);
+      letter-spacing: -0.5px;
+    }
+
+    .brand-tagline {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1.4;
+      margin-bottom: 2.25rem;
+    }
+
+    .brand-features {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .brand-feature {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.85rem;
+    }
+
+    .brand-feature-icon {
+      flex-shrink: 0;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+    .brand-feature-icon.orange {
+      background: rgba(249, 115, 22, 0.15);
+      color: var(--accent);
+    }
+    .brand-feature-icon.blue {
+      background: rgba(59, 130, 246, 0.12);
+      color: #3b82f6;
+    }
+    .brand-feature-icon.green {
+      background: rgba(16, 185, 129, 0.12);
+      color: var(--success);
+    }
+
+    .brand-feature-text h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin: 0 0 0.15rem;
+    }
+    .brand-feature-text p {
+      font-size: 0.825rem;
+      color: var(--text-muted);
+      margin: 0;
+      line-height: 1.45;
+    }
+
+    /* ── Mobile responsive ─────────────── */
+    @media (max-width: 991.98px) {
+      .login-wrapper {
+        flex-direction: column;
+      }
+
+      .login-brand-panel {
+        flex: none;
+        padding: 2rem 1.5rem 2.5rem;
+        min-height: auto;
+      }
+
+      .login-brand-panel::before { display: none; }
+
+      .brand-content {
+        max-width: 100%;
+        text-align: center;
+      }
+
+      .brand-logo-large {
+        justify-content: center;
+        margin-bottom: 0.75rem;
+      }
+
+      .brand-tagline {
+        font-size: 1.15rem;
+        margin-bottom: 0;
+      }
+
+      .brand-features { display: none; }
+
+      .brand-decor-1 {
+        width: 200px; height: 200px;
+        top: -60px; right: -40px;
+      }
+      .brand-decor-2 {
+        width: 120px; height: 120px;
+        bottom: -30px; left: 20px;
+      }
+      .brand-decor-3 { display: none; }
+      .brand-dots { display: none; }
+
+      .login-form-panel {
+        flex: 1;
+        padding: 2rem 1.5rem;
+        align-items: flex-start;
+        padding-top: 1.5rem;
+      }
+
+      .back-link { margin-bottom: 1.25rem; }
+      .form-logo { display: none; }
+      .form-title { font-size: 1.35rem; margin-top: 0.5rem; }
+    }
+
+    @media (max-width: 575.98px) {
+      .login-form-panel { padding: 1.5rem 1.25rem; }
+      .login-brand-panel { padding: 1.5rem 1.25rem 2rem; }
+      .social-buttons { gap: 0.6rem; }
+      .btn-social { padding: 0.65rem 1rem; font-size: 0.875rem; }
+      .form-extras { flex-direction: column; align-items: flex-start; gap: 0.6rem; }
+    }
+
+    /* ── Animations ─────────────────────── */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .form-container {
+      animation: fadeInUp 0.5s ease-out;
+    }
+
+    .brand-content {
+      animation: fadeInUp 0.6s ease-out 0.1s both;
+    }
+  </style>
+</head>
+<body>
+
+<div class="login-wrapper">
+
+  <!-- LEFT: Form Panel -->
+  <div class="login-form-panel">
+    <div class="form-container">
+
+      <a href="index.html" class="back-link">
+        <i class="bi bi-arrow-left"></i> Voltar para inicio
+      </a>
+
+      <div class="form-logo">
+        <svg width="34" height="34" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="40" height="40" rx="10" fill="#fff" stroke="#1e3a5f" stroke-width="1.5"/>
+  <rect x="9" y="9" width="16" height="4" rx="2" fill="#f97316"/>
+  <rect x="9" y="16" width="22" height="4" rx="2" fill="#3b82f6"/>
+  <rect x="9" y="23" width="22" height="4" rx="2" fill="#10b981"/>
+  <rect x="9" y="30" width="14" height="4" rx="2" fill="#1e3a5f"/>
+</svg>
+        <span style="font-family:Georgia,'Times New Roman',serif;font-style:italic;">Delibera<span style="color:#f97316;font-style:normal;">.</span></span>
+      </div>
+
+      <h1 class="form-title">Acesso da Coordenação</h1>
+      <p class="form-subtitle">Entre com suas credenciais institucionais</p>
+
+      <!-- Social Login -->
+      <div class="social-buttons">
+        <a href="dashboard-coordenacao.html" class="btn-social">
+          <svg width="20" height="20" viewBox="0 0 24 24">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18A10.96 10.96 0 0 0 1 12c0 1.77.42 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          Continuar com Google
+        </a>
+
+        <a href="dashboard-coordenacao.html" class="btn-social">
+          <svg width="20" height="20" viewBox="0 0 24 24">
+            <path d="M0 0h11.377v11.372H0z" fill="#f25022" transform="translate(1 1)"/>
+            <path d="M12.623 0H24v11.372H12.623z" fill="#00a4ef" transform="translate(-0.623 1)"/>
+            <path d="M0 12.623h11.377V24H0z" fill="#7fba00" transform="translate(1 -0.623)"/>
+            <path d="M12.623 12.623H24V24H12.623z" fill="#ffb900" transform="translate(-0.623 -0.623)"/>
+          </svg>
+          Continuar com Outlook
+        </a>
+      </div>
+
+      <div class="divider">ou use email e senha</div>
+
+      <!-- Email / Password Form -->
+      <form action="dashboard-coordenacao.html" method="get" autocomplete="on">
+        <div class="input-group-custom">
+          <label for="email">Email institucional</label>
+          <div class="input-icon-wrapper">
+            <i class="bi bi-envelope"></i>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="seu.email@instituicao.edu.br"
+              autocomplete="email"
+              required
+            >
+          </div>
+        </div>
+
+        <div class="input-group-custom">
+          <label for="password">Senha</label>
+          <div class="input-icon-wrapper">
+            <i class="bi bi-lock"></i>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Digite sua senha"
+              autocomplete="current-password"
+              required
+            >
+            <button type="button" class="toggle-password" aria-label="Mostrar senha" tabindex="-1">
+              <i class="bi bi-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-extras">
+          <label class="form-check-custom">
+            <input type="checkbox" name="remember">
+            <span>Lembrar de mim</span>
+          </label>
+          <a href="#" class="forgot-link">Esqueci minha senha</a>
+        </div>
+
+        <button type="submit" class="btn-submit">
+          Entrar
+          <i class="bi bi-arrow-right"></i>
+        </button>
+      </form>
+
+      <div class="form-footer">
+        Ainda não tem uma conta?
+        <a href="planos.html">Contratar plano</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- RIGHT: Brand Panel -->
+  <div class="login-brand-panel">
+
+    <!-- Decorative shapes -->
+    <div class="brand-decor brand-decor-1"></div>
+    <div class="brand-decor brand-decor-2"></div>
+    <div class="brand-decor brand-decor-3"></div>
+    <div class="brand-dots">
+      <span></span><span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span><span></span>
+    </div>
+
+    <div class="brand-content">
+      <div class="brand-logo-large">
+        <svg width="34" height="34" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="40" height="40" rx="10" fill="#fff" stroke="#1e3a5f" stroke-width="1.5"/>
+  <rect x="9" y="9" width="16" height="4" rx="2" fill="#f97316"/>
+  <rect x="9" y="16" width="22" height="4" rx="2" fill="#3b82f6"/>
+  <rect x="9" y="23" width="22" height="4" rx="2" fill="#10b981"/>
+  <rect x="9" y="30" width="14" height="4" rx="2" fill="#1e3a5f"/>
+</svg>
+        <span style="font-family:Georgia,'Times New Roman',serif;font-style:italic;">Delibera<span style="color:#f97316;font-style:normal;">.</span></span>
+      </div>
+
+      <p class="brand-tagline">
+        Gestão de solicitações acadêmicas simplificada
+      </p>
+
+      <div class="brand-features">
+        <div class="brand-feature">
+          <div class="brand-feature-icon orange">
+            <i class="bi bi-file-earmark-check"></i>
+          </div>
+          <div class="brand-feature-text">
+            <h4>Protocolo automático</h4>
+            <p>Cada solicitação recebe um número de protocolo único, sem trabalho manual.</p>
+          </div>
+        </div>
+
+        <div class="brand-feature">
+          <div class="brand-feature-icon blue">
+            <i class="bi bi-clock-history"></i>
+          </div>
+          <div class="brand-feature-text">
+            <h4>Acompanhamento em tempo real</h4>
+            <p>Alunos e coordenação acompanham cada etapa do processo online.</p>
+          </div>
+        </div>
+
+        <div class="brand-feature">
+          <div class="brand-feature-icon green">
+            <i class="bi bi-graph-up-arrow"></i>
+          </div>
+          <div class="brand-feature-text">
+            <h4>Relatórios para a diretoria</h4>
+            <p>Dados consolidados para decisões estratégicas em poucos cliques.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+  // Toggle password visibility
+  document.querySelector('.toggle-password').addEventListener('click', function() {
+    const input = document.getElementById('password');
+    const icon = this.querySelector('i');
+
+    if (input.type === 'password') {
+      input.type = 'text';
+      icon.classList.replace('bi-eye', 'bi-eye-slash');
+      this.setAttribute('aria-label', 'Ocultar senha');
+    } else {
+      input.type = 'password';
+      icon.classList.replace('bi-eye-slash', 'bi-eye');
+      this.setAttribute('aria-label', 'Mostrar senha');
+    }
+  });
+</script>
+
+  <script src="tour.js"></script>
+</body>
+</html>

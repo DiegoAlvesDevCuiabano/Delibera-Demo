@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Analisar Solicitação - Delibera</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%23fff' stroke='%231e3a5f' stroke-width='2'/%3E%3Crect x='9' y='9' width='16' height='4' rx='2' fill='%23f97316'/%3E%3Crect x='9' y='16' width='22' height='4' rx='2' fill='%233b82f6'/%3E%3Crect x='9' y='23' width='22' height='4' rx='2' fill='%2310b981'/%3E%3Crect x='9' y='30' width='14' height='4' rx='2' fill='%231e3a5f'/%3E%3C/svg%3E">
+  <meta property="og:title" content="Delibera - Gestão de Solicitações Acadêmicas">
+  <meta property="og:description" content="Centralize solicitações acadêmicas em um painel único. Sem papel, sem WhatsApp, sem e-mail perdido.">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+  <style>
+    :root {
+      --navy: #1e3a5f;
+      --accent: #f97316;
+      --accent-light: rgba(249, 115, 22, 0.08);
+      --blue: #3b82f6;
+      --blue-light: rgba(59, 130, 246, 0.08);
+      --success: #10b981;
+      --success-light: rgba(16, 185, 129, 0.08);
+      --danger: #ef4444;
+      --danger-light: rgba(239, 68, 68, 0.06);
+      --warning: #f59e0b;
+      --warning-light: rgba(245, 158, 11, 0.08);
+      --bg-white: #ffffff;
+      --bg-body: #f8fafc;
+      --bg-warm: #faf8f6;
+      --border: #e2e8f0;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --sidebar-width: 260px;
+      --navbar-height: 56px;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+      --shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.06);
+      --radius: 16px;
+      --radius-sm: 10px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-body);
+      color: var(--text);
+      margin: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Top Navbar ─────────────────────── */
+    .top-navbar {
+      background: var(--bg-white);
+      height: var(--navbar-height);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1040;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.25rem;
+      border-bottom: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .navbar-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .sidebar-toggle {
+      display: none;
+      background: none;
+      border: none;
+      padding: 0.25rem;
+      cursor: pointer;
+      color: var(--text);
+      font-size: 1.25rem;
+      line-height: 1;
+    }
+
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .navbar-brand img {
+      height: 28px;
+      width: 28px;
+    }
+
+    .navbar-brand span {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .navbar-right {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .nav-icon-btn {
+      position: relative;
+      background: none;
+      border: none;
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .nav-icon-btn:hover {
+      background: var(--bg-body);
+      color: var(--text);
+    }
+
+    .nav-icon-btn i { font-size: 1.2rem; }
+
+    .notification-badge {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: white;
+      font-size: 0.65rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid var(--bg-white);
+    }
+
+    .user-dropdown {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.3rem 0.6rem 0.3rem 0.3rem;
+      border-radius: 10px;
+      cursor: pointer;
+      border: none;
+      background: none;
+      transition: background 0.15s;
+    }
+
+    .user-dropdown:hover { background: var(--bg-body); }
+
+    .user-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: var(--navy);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .user-info {
+      text-align: left;
+      line-height: 1.2;
+    }
+
+    .user-info .name {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .user-info .role {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .user-dropdown .bi-chevron-down {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    /* ── Sidebar ────────────────────────── */
+    .sidebar {
+      position: fixed;
+      top: var(--navbar-height);
+      left: 0;
+      bottom: 0;
+      width: var(--sidebar-width);
+      background: var(--bg-white);
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+      z-index: 1030;
+      padding: 1rem 0;
+      transition: transform 0.25s ease;
+    }
+
+    .sidebar-section-label {
+      padding: 1.25rem 1.25rem 0.5rem;
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      opacity: 0.7;
+    }
+
+    .sidebar-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 0.5rem 1.25rem;
+    }
+
+    .sidebar-nav {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .sidebar-nav li { margin: 1px 0; }
+
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      padding: 0.6rem 1.25rem;
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 500;
+      border-left: 3px solid transparent;
+      transition: all 0.15s;
+      position: relative;
+    }
+
+    .sidebar-link:hover {
+      color: var(--text);
+      background: var(--bg-body);
+    }
+
+    .sidebar-link.active {
+      color: var(--accent);
+      background: var(--accent-light);
+      border-left-color: var(--accent);
+      font-weight: 600;
+    }
+
+    .sidebar-link i {
+      font-size: 1.1rem;
+      width: 20px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .sidebar-link .badge-count {
+      margin-left: auto;
+      background: var(--accent);
+      color: white;
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 0.15rem 0.5rem;
+      border-radius: 99px;
+      line-height: 1.4;
+    }
+
+    .sidebar-link .chevron {
+      margin-left: auto;
+      font-size: 0.7rem;
+      transition: transform 0.2s;
+    }
+
+    .sidebar-link[aria-expanded="true"] .chevron {
+      transform: rotate(90deg);
+    }
+
+    .sidebar-submenu {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.25s ease;
+    }
+
+    .sidebar-submenu.open { max-height: 200px; }
+
+    .sidebar-submenu .sidebar-link {
+      padding-left: 3.2rem;
+      font-size: 0.82rem;
+      border-left: 3px solid transparent;
+    }
+
+    .sidebar-link-exit {
+      color: #ef4444;
+    }
+
+    .sidebar-link-exit:hover {
+      color: #dc2626;
+      background: rgba(239, 68, 68, 0.05);
+    }
+
+    /* ── Backdrop (mobile) ──────────────── */
+    .sidebar-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.3);
+      z-index: 1025;
+      backdrop-filter: blur(2px);
+    }
+
+    .sidebar-backdrop.active { display: block; }
+
+    /* ── Main Content ───────────────────── */
+    .main-content {
+      margin-left: var(--sidebar-width);
+      margin-top: var(--navbar-height);
+      padding: 1.75rem 2rem 3rem;
+      min-height: calc(100vh - var(--navbar-height));
+    }
+
+    /* ── Breadcrumb ─────────────────────── */
+    .breadcrumb-clean {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      list-style: none;
+      padding: 0;
+      margin: 0 0 1rem;
+      font-size: 0.82rem;
+    }
+
+    .breadcrumb-clean li {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .breadcrumb-clean li + li::before {
+      content: '\203A';
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 1;
+    }
+
+    .breadcrumb-clean a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .breadcrumb-clean a:hover {
+      color: var(--accent);
+    }
+
+    .breadcrumb-clean .current {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    /* ── Page Header ────────────────────── */
+    .page-header {
+      margin-bottom: 1.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .page-header-left h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+      margin: 0 0 0.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .page-header-left h1 i { color: var(--accent); font-size: 1.3rem; }
+
+    .page-header-left p {
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      margin: 0;
+    }
+
+    .protocol-tag {
+      font-family: 'SFMono-Regular', 'Consolas', 'Liberation Mono', monospace;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: var(--bg-body);
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+    }
+
+    /* ── Cards ──────────────────────────── */
+    .card-clean {
+      background: var(--bg-white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .card-clean .card-header-clean {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-clean .card-header-clean h2 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin: 0;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card-clean .card-header-clean h2 i {
+      color: var(--text-muted);
+      font-size: 1rem;
+    }
+
+    .card-clean .card-body-clean {
+      padding: 1.5rem;
+    }
+
+    /* ── Badge Status ──────────────────── */
+    .badge-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.3rem 0.75rem;
+      border-radius: 99px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .badge-status--dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .badge-status--em-analise {
+      background: var(--warning-light);
+      color: var(--warning);
+    }
+
+    .badge-status--pendente {
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    .badge-status--deferido {
+      background: var(--success-light);
+      color: var(--success);
+    }
+
+    .badge-status--indeferido {
+      background: var(--danger-light);
+      color: var(--danger);
+    }
+
+    /* ── Detail Grid ───────────────────── */
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem 2rem;
+    }
+
+    .detail-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .detail-item.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .detail-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+    }
+
+    .detail-value {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .detail-value a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    .detail-value a:hover {
+      text-decoration: underline;
+    }
+
+    /* ── Student Info Header ───────────── */
+    .student-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding-bottom: 1.25rem;
+      margin-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .student-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), #fb923c);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .student-meta {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .student-meta .student-name {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin: 0 0 0.15rem;
+    }
+
+    .student-meta .student-contact {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .student-meta .student-contact span {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    /* ── Description Box ───────────────── */
+    .description-box {
+      background: var(--bg-body);
+      border-radius: var(--radius-sm);
+      padding: 1rem 1.25rem;
+      font-size: 0.88rem;
+      line-height: 1.7;
+      color: var(--text);
+      border-left: 3px solid var(--accent);
+    }
+
+    /* ── Attachment Card ────────────────── */
+    .attachment-card {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      padding: 0.85rem 1rem;
+      background: var(--bg-body);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+    }
+
+    .attachment-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: var(--danger-light);
+      color: var(--danger);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .attachment-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .attachment-info .file-name {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .attachment-info .file-size {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .attachment-actions {
+      display: flex;
+      gap: 0.4rem;
+    }
+
+    .btn-attachment {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg-white);
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-size: 0.95rem;
+    }
+
+    .btn-attachment:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    /* ── Sticky Action Bar ─────────────── */
+    .sticky-action-bar {
+      position: fixed;
+      bottom: 0;
+      left: var(--sidebar-width);
+      right: 0;
+      background: var(--bg-white);
+      border-top: 1px solid var(--border);
+      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+      padding: 0.75rem 1.5rem;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.6rem;
+    }
+
+    @media (max-width: 991px) {
+      .sticky-action-bar { left: 0; }
+    }
+
+    /* ── Action Buttons ────────────────── */
+    .action-buttons {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .btn-action {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.65rem 1.25rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.88rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.15s;
+      border: 2px solid transparent;
+    }
+
+    .btn-action i { font-size: 1rem; }
+
+    .btn-action--deferir {
+      background: var(--success);
+      color: white;
+      border-color: var(--success);
+    }
+
+    .btn-action--deferir:hover {
+      background: #059669;
+      border-color: #059669;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+    }
+
+    .btn-action--encaminhar {
+      background: var(--blue);
+      color: white;
+      border-color: var(--blue);
+    }
+
+    .btn-action--encaminhar:hover {
+      background: #2563eb;
+      border-color: #2563eb;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+    }
+
+    .btn-action--indeferir {
+      background: var(--bg-white);
+      color: var(--danger);
+      border-color: var(--danger);
+    }
+
+    .btn-action--indeferir:hover {
+      background: var(--danger);
+      color: white;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+    }
+
+    /* ── Form Elements ─────────────────── */
+    .form-label-clean {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.4rem;
+    }
+
+    .form-textarea {
+      width: 100%;
+      min-height: 120px;
+      padding: 0.85rem 1rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--bg-body);
+      font-family: inherit;
+      font-size: 0.88rem;
+      color: var(--text);
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .form-textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+      background: var(--bg-white);
+    }
+
+    .form-select-clean {
+      width: 100%;
+      padding: 0.65rem 1rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--bg-body);
+      font-family: inherit;
+      font-size: 0.88rem;
+      color: var(--text);
+      outline: none;
+      cursor: pointer;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      -webkit-appearance: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.85rem center;
+      background-size: 12px;
+      padding-right: 2.5rem;
+    }
+
+    .form-select-clean:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+      background-color: var(--bg-white);
+    }
+
+    .form-separator {
+      height: 1px;
+      background: var(--border);
+      margin: 1.25rem 0;
+    }
+
+    /* ── Timeline ──────────────────────── */
+    .timeline {
+      position: relative;
+      padding-left: 1.5rem;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 5px;
+      top: 6px;
+      bottom: 6px;
+      width: 2px;
+      background: var(--border);
+      border-radius: 2px;
+    }
+
+    .timeline-item {
+      position: relative;
+      padding-bottom: 1.25rem;
+    }
+
+    .timeline-item:last-child {
+      padding-bottom: 0;
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: -1.5rem;
+      top: 4px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      background: var(--bg-white);
+      z-index: 1;
+    }
+
+    .timeline-dot--accent {
+      border-color: var(--accent);
+      background: var(--accent);
+    }
+
+    .timeline-dot--blue {
+      border-color: var(--blue);
+      background: var(--blue);
+    }
+
+    .timeline-dot--muted {
+      border-color: var(--text-muted);
+      background: var(--text-muted);
+    }
+
+    .timeline-date {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 0.15rem;
+    }
+
+    .timeline-text {
+      font-size: 0.82rem;
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    .timeline-text strong {
+      font-weight: 600;
+    }
+
+    /* ── Back Button ───────────────────── */
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.25rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--bg-white);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s;
+      margin-top: 1.5rem;
+    }
+
+    .btn-back:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .btn-back i { font-size: 1rem; }
+
+    /* ── Responsive ─────────────────────── */
+    @media (max-width: 991px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+        box-shadow: var(--shadow-md);
+      }
+
+      .main-content {
+        margin-left: 0;
+        padding: 1.25rem 1rem 2rem;
+      }
+
+      .sidebar-toggle { display: flex; }
+
+      .user-info { display: none; }
+    }
+
+    @media (max-width: 768px) {
+      .content-grid {
+        grid-template-columns: 1fr !important;
+      }
+
+      .page-header { flex-direction: column; align-items: flex-start; }
+
+      .page-header-left h1 { font-size: 1.25rem; }
+
+      .detail-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .student-meta .student-contact {
+        flex-direction: column;
+        gap: 0.3rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .main-content { padding: 1rem 0.75rem 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Top Navbar ──────────────────────── -->
+  <nav class="top-navbar">
+    <div class="navbar-left">
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Abrir menu">
+        <i class="bi bi-list"></i>
+      </button>
+      <a class="navbar-brand" href="#">
+        <svg width="28" height="28" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="40" height="40" rx="10" fill="#fff" stroke="#1e3a5f" stroke-width="1.5"/>
+  <rect x="9" y="9" width="16" height="4" rx="2" fill="#f97316"/>
+  <rect x="9" y="16" width="22" height="4" rx="2" fill="#3b82f6"/>
+  <rect x="9" y="23" width="22" height="4" rx="2" fill="#10b981"/>
+  <rect x="9" y="30" width="14" height="4" rx="2" fill="#1e3a5f"/>
+</svg>
+        <span style="font-family:Georgia,'Times New Roman',serif;font-style:italic;">Delibera<span style="color:#f97316;font-style:normal;">.</span></span>
+      </a>
+    </div>
+    <div class="navbar-right">
+      <button class="nav-icon-btn" title="Notificações">
+        <i class="bi bi-bell"></i>
+        <span class="notification-badge">3</span>
+      </button>
+      <button class="user-dropdown" type="button">
+        <div class="user-avatar">JS</div>
+        <div class="user-info">
+          <div class="name">Prof. João Silva</div>
+          <div class="role">Coordenador</div>
+        </div>
+        <i class="bi bi-chevron-down"></i>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ── Sidebar Backdrop (mobile) ───────── -->
+  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+  <!-- ── Sidebar ─────────────────────────── -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-section-label">Principal</div>
+    <ul class="sidebar-nav">
+      <li>
+        <a href="dashboard-coordenacao.html" class="sidebar-link">
+          <i class="bi bi-grid-1x2"></i>
+          Dashboard
+        </a>
+      </li>
+      <li>
+        <a href="javascript:void(0)" class="sidebar-link active" id="solicitacoesToggle" aria-expanded="true">
+          <i class="bi bi-file-earmark-text"></i>
+          Solicitações
+          <i class="bi bi-chevron-right chevron"></i>
+        </a>
+        <ul class="sidebar-submenu open" id="solicitacoesSubmenu">
+          <li>
+            <a href="#" class="sidebar-link">
+              Pendentes
+              <span class="badge-count">12</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="sidebar-link">Em análise</a>
+          </li>
+          <li>
+            <a href="#" class="sidebar-link">Todas</a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="#" class="sidebar-link">
+          <i class="bi bi-bar-chart-line"></i>
+          Relatórios
+        </a>
+      </li>
+    </ul>
+
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section-label">Sistema</div>
+    <ul class="sidebar-nav">
+      <li>
+        <a href="#" class="sidebar-link">
+          <i class="bi bi-gear"></i>
+          Configurações
+        </a>
+      </li>
+    </ul>
+
+    <div class="sidebar-divider"></div>
+    <ul class="sidebar-nav">
+      <li>
+        <a href="login.html" class="sidebar-link sidebar-link-exit">
+          <i class="bi bi-box-arrow-left"></i>
+          Sair
+        </a>
+      </li>
+    </ul>
+  </aside>
+
+  <!-- ── Main Content ────────────────────── -->
+  <main class="main-content">
+
+    <!-- Breadcrumb -->
+    <ul class="breadcrumb-clean">
+      <li><a href="dashboard-coordenacao.html">Dashboard</a></li>
+      <li><a href="#">Solicitações</a></li>
+      <li><span class="current">Analisar #DEL-2026-048721</span></li>
+    </ul>
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <div class="page-header-left">
+        <h1>
+          <i class="bi bi-clipboard-check"></i>
+          Analisar Solicitação
+        </h1>
+        <p>Revise os detalhes e registre o parecer da coordenação</p>
+      </div>
+      <span class="protocol-tag">DEL-2026-048721</span>
+    </div>
+
+    <!-- Content Grid -->
+    <div class="content-grid" style="display: grid; grid-template-columns: 1fr 380px; gap: 1.25rem; align-items: start;">
+
+      <!-- ── LEFT COLUMN ─────────────────── -->
+      <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+
+        <!-- Request Details Card -->
+        <div class="card-clean">
+          <div class="card-header-clean">
+            <h2><i class="bi bi-file-earmark-text"></i> Detalhes da Solicitação</h2>
+            <span class="badge-status badge-status--em-analise">
+              <span class="badge-status--dot"></span>
+              Em análise
+            </span>
+          </div>
+          <div class="card-body-clean">
+
+            <!-- Student Info -->
+            <div class="student-header">
+              <div class="student-avatar">MS</div>
+              <div class="student-meta">
+                <div class="student-name">Mariana Silva</div>
+                <div class="student-contact">
+                  <span><i class="bi bi-envelope"></i> mariana.silva@fatec.sp.gov.br</span>
+                  <span><i class="bi bi-phone"></i> (11) 98765-4321</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Detail Grid -->
+            <div class="detail-grid">
+              <div class="detail-item">
+                <span class="detail-label">Curso / Turma</span>
+                <span class="detail-value">ADS — 3º A</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Tipo de Solicitação</span>
+                <span class="detail-value">Segunda chamada de prova</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Disciplina</span>
+                <span class="detail-value">Algoritmos</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Data Relacionada</span>
+                <span class="detail-value">12/04/2026</span>
+              </div>
+              <div class="detail-item full-width">
+                <span class="detail-label">Justificativa do Aluno</span>
+                <div class="description-box">
+                  Não pude comparecer à prova de Algoritmos do dia 12/04 por motivo de saúde. Estive com quadro de virose confirmado por atestado médico. Solicito a aplicação de segunda chamada conforme regulamento institucional.
+                </div>
+              </div>
+              <div class="detail-item full-width">
+                <span class="detail-label">Anexos</span>
+                <div class="attachment-card">
+                  <div class="attachment-icon">
+                    <i class="bi bi-file-earmark-pdf"></i>
+                  </div>
+                  <div class="attachment-info">
+                    <div class="file-name">atestado_médico.pdf</div>
+                    <div class="file-size">245 KB</div>
+                  </div>
+                  <div class="attachment-actions">
+                    <button class="btn-attachment" title="Visualizar">
+                      <i class="bi bi-eye"></i>
+                    </button>
+                    <button class="btn-attachment" title="Baixar">
+                      <i class="bi bi-download"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── RIGHT COLUMN ────────────────── -->
+      <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+
+        <!-- Actions Card -->
+        <div class="card-clean">
+          <div class="card-header-clean">
+            <h2><i class="bi bi-lightning-charge"></i> Decisão</h2>
+          </div>
+          <div class="card-body-clean">
+
+            <!-- Parecer -->
+            <div style="margin-bottom: 1.25rem;">
+              <label class="form-label-clean">Parecer da Coordenação</label>
+              <textarea class="form-textarea" placeholder="Escreva o parecer da coordenação..."></textarea>
+            </div>
+
+            <!-- Professor Select -->
+            <div style="margin-bottom: 1.25rem;">
+              <label class="form-label-clean">Encaminhar para Professor</label>
+              <select class="form-select-clean">
+                <option value="">Selecione o professor</option>
+                <option value="1">Prof. Carlos Mendes — Algoritmos</option>
+                <option value="2">Profa. Ana Beatriz — Banco de Dados</option>
+                <option value="3">Prof. Roberto Lima — Eng. Software</option>
+              </select>
+            </div>
+
+            <div class="form-separator"></div>
+            <p style="font-size:0.82rem;color:var(--text-muted);text-align:center;margin:0;"><i class="bi bi-arrow-down me-1"></i>Use a barra de ações abaixo para decidir</p>
+
+          </div>
+        </div>
+
+        <!-- Timeline Card -->
+        <div class="card-clean">
+          <div class="card-header-clean">
+            <h2><i class="bi bi-clock-history"></i> Histórico</h2>
+          </div>
+          <div class="card-body-clean">
+            <div class="timeline">
+              <div class="timeline-item">
+                <div class="timeline-dot timeline-dot--accent"></div>
+                <div class="timeline-date">16/04/2026 — 09:10</div>
+                <div class="timeline-text"><strong>Em análise</strong> — Prof. João Silva</div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot timeline-dot--blue"></div>
+                <div class="timeline-date">15/04/2026 — 16:45</div>
+                <div class="timeline-text"><strong>Recebida pela coordenação</strong></div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot timeline-dot--muted"></div>
+                <div class="timeline-date">15/04/2026 — 14:32</div>
+                <div class="timeline-text"><strong>Solicitação criada</strong> por Mariana Silva</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Back Button -->
+    <a href="dashboard-coordenacao.html" class="btn-back">
+      <i class="bi bi-arrow-left"></i>
+      Voltar ao Dashboard
+    </a>
+
+    <!-- Spacer for sticky bar -->
+    <div style="height:80px;"></div>
+  </main>
+
+  <!-- Sticky Action Bar -->
+  <div class="sticky-action-bar">
+    <div class="action-buttons">
+      <button class="btn-action btn-action--deferir" type="button">
+        <i class="bi bi-check-circle"></i>
+        Deferir
+      </button>
+      <button class="btn-action btn-action--encaminhar" type="button">
+        <i class="bi bi-send"></i>
+        Encaminhar
+      </button>
+      <button class="btn-action btn-action--indeferir" type="button">
+        <i class="bi bi-x-circle"></i>
+        Indeferir
+      </button>
+    </div>
+  </div>
+
+  <!-- ── Scripts ─────────────────────────── -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // ── Sidebar Toggle (mobile) ──────────
+    const sidebar = document.getElementById('sidebar');
+    const backdrop = document.getElementById('sidebarBackdrop');
+    const toggle = document.getElementById('sidebarToggle');
+
+    function openSidebar() {
+      sidebar.classList.add('open');
+      backdrop.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeSidebar() {
+      sidebar.classList.remove('open');
+      backdrop.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    toggle.addEventListener('click', function () {
+      if (sidebar.classList.contains('open')) {
+        closeSidebar();
+      } else {
+        openSidebar();
+      }
+    });
+
+    backdrop.addEventListener('click', closeSidebar);
+
+    // ── Sidebar Submenu Toggle ───────────
+    const solicitacoesToggle = document.getElementById('solicitacoesToggle');
+    const solicitacoesSubmenu = document.getElementById('solicitacoesSubmenu');
+
+    solicitacoesToggle.addEventListener('click', function () {
+      const expanded = this.getAttribute('aria-expanded') === 'true';
+      this.setAttribute('aria-expanded', !expanded);
+      solicitacoesSubmenu.classList.toggle('open');
+    });
+
+    // ── Action Button Feedback ───────────
+    document.querySelectorAll('.btn-action').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const textarea = document.querySelector('.form-textarea');
+        const parecer = textarea.value.trim();
+
+        if (this.classList.contains('btn-action--encaminhar')) {
+          const select = document.querySelector('.form-select-clean');
+          if (!select.value) {
+            select.focus();
+            select.style.borderColor = 'var(--danger)';
+            select.style.boxShadow = '0 0 0 3px rgba(239, 68, 68, 0.1)';
+            setTimeout(function () {
+              select.style.borderColor = '';
+              select.style.boxShadow = '';
+            }, 2000);
+            return;
+          }
+        }
+
+        if (!parecer && this.classList.contains('btn-action--indeferir')) {
+          textarea.focus();
+          textarea.style.borderColor = 'var(--danger)';
+          textarea.style.boxShadow = '0 0 0 3px rgba(239, 68, 68, 0.1)';
+          textarea.setAttribute('placeholder', 'O parecer é obrigatório para indeferir...');
+          setTimeout(function () {
+            textarea.style.borderColor = '';
+            textarea.style.boxShadow = '';
+            textarea.setAttribute('placeholder', 'Escreva o parecer da coordenação...');
+          }, 2000);
+          return;
+        }
+
+        // Visual feedback
+        const originalText = this.innerHTML;
+        this.disabled = true;
+        this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processando...';
+
+        setTimeout(function () {
+          btn.innerHTML = originalText;
+          btn.disabled = false;
+          alert('Ação executada com sucesso! (protótipo)');
+        }, 1500);
+      });
+    });
+  </script>
+  <script src="tour.js"></script>
+</body>
+</html>

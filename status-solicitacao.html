@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Status da Solicitação - Delibera</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%23fff' stroke='%231e3a5f' stroke-width='2'/%3E%3Crect x='9' y='9' width='16' height='4' rx='2' fill='%23f97316'/%3E%3Crect x='9' y='16' width='22' height='4' rx='2' fill='%233b82f6'/%3E%3Crect x='9' y='23' width='22' height='4' rx='2' fill='%2310b981'/%3E%3Crect x='9' y='30' width='14' height='4' rx='2' fill='%231e3a5f'/%3E%3C/svg%3E">
+  <meta property="og:title" content="Delibera - Gestão de Solicitações Acadêmicas">
+  <meta property="og:description" content="Centralize solicitações acadêmicas em um painel único. Sem papel, sem WhatsApp, sem e-mail perdido.">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+  <style>
+    :root {
+      --navy: #1e3a5f;
+      --accent: #f97316;
+      --accent-hover: #ea580c;
+      --accent-light: rgba(249, 115, 22, 0.08);
+      --success: #10b981;
+      --success-light: rgba(16, 185, 129, 0.08);
+      --blue: #3b82f6;
+      --blue-light: rgba(59, 130, 246, 0.08);
+      --danger: #ef4444;
+      --danger-light: rgba(239, 68, 68, 0.08);
+      --warning: #f59e0b;
+      --warning-light: rgba(245, 158, 11, 0.1);
+      --bg-warm: #faf8f6;
+      --bg-white: #ffffff;
+      --border: #e2e8f0;
+      --text: #1e293b;
+      --text-muted: #64748b;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg-warm);
+      color: var(--text);
+      margin: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Navbar ──────────────────────────── */
+    .navbar-custom {
+      background: var(--bg-white);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+      z-index: 1030;
+    }
+
+    .navbar-custom .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+    }
+
+    .navbar-brand .logo-text {
+      font-weight: 800;
+      font-size: 1.35rem;
+      letter-spacing: -0.5px;
+      color: var(--navy);
+    }
+
+    .navbar-custom .nav-link {
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.92rem;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      transition: color 0.2s, background 0.2s;
+    }
+
+    .navbar-custom .nav-link:hover {
+      color: var(--text);
+      background: rgba(0, 0, 0, 0.04);
+    }
+
+    .navbar-custom .nav-link.active {
+      color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .navbar-custom .navbar-toggler {
+      border: 1.5px solid var(--border);
+      padding: 0.35rem 0.6rem;
+    }
+
+    .navbar-custom .navbar-toggler-icon {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%2364748b' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    }
+
+    /* ── Breadcrumb ─────────────────────── */
+    .breadcrumb-bar {
+      background: var(--bg-white);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 0;
+    }
+
+    .breadcrumb-bar .breadcrumb {
+      margin: 0;
+      font-size: 0.88rem;
+      font-weight: 500;
+    }
+
+    .breadcrumb-bar .breadcrumb-item a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .breadcrumb-bar .breadcrumb-item a:hover {
+      color: var(--accent);
+    }
+
+    .breadcrumb-bar .breadcrumb-item.active {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .breadcrumb-bar .breadcrumb-item + .breadcrumb-item::before {
+      content: "\F285";
+      font-family: "bootstrap-icons";
+      font-size: 0.7rem;
+      color: #cbd5e1;
+      vertical-align: middle;
+    }
+
+    /* ── Page Header ────────────────────── */
+    .page-header {
+      background: linear-gradient(135deg, #ffffff 0%, #fff7ed 50%, #fff3e6 100%);
+      padding: 2rem 0 1.75rem;
+      border-bottom: 1px solid rgba(249, 115, 22, 0.1);
+    }
+
+    .page-header-inner {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .page-header-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(249, 115, 22, 0.12), rgba(249, 115, 22, 0.06));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .page-header-icon i {
+      font-size: 1.75rem;
+      color: var(--accent);
+    }
+
+    .page-header h1 {
+      font-size: 1.65rem;
+      font-weight: 800;
+      color: var(--text);
+      margin: 0;
+      letter-spacing: -0.3px;
+    }
+
+    .page-header p {
+      margin: 0.3rem 0 0;
+      font-size: 1rem;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    /* ── Cards ──────────────────────────── */
+    .detail-card {
+      background: var(--bg-white);
+      border: none;
+      border-radius: 16px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.03);
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeInUp 0.5s ease forwards;
+    }
+
+    .detail-card:nth-child(1) { animation-delay: 0.05s; }
+    .detail-card:nth-child(2) { animation-delay: 0.12s; }
+    .detail-card:nth-child(3) { animation-delay: 0.19s; }
+    .detail-card:nth-child(4) { animation-delay: 0.26s; }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .detail-card .card-body {
+      padding: 1.75rem;
+    }
+
+    .card-title-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      border-left: 3px solid var(--accent);
+      padding-left: 0.85rem;
+    }
+
+    .card-title-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .card-title-icon.orange {
+      background: rgba(249, 115, 22, 0.1);
+      color: var(--accent);
+    }
+
+    .card-title-icon.blue {
+      background: rgba(59, 130, 246, 0.1);
+      color: var(--blue);
+    }
+
+    .card-title-icon.green {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--success);
+    }
+
+    .card-title-icon.navy {
+      background: rgba(30, 58, 95, 0.08);
+      color: var(--navy);
+    }
+
+    .card-title-icon i {
+      font-size: 1.15rem;
+    }
+
+    .card-title-text {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+      margin: 0;
+    }
+
+    /* ── Status Badge ──────────────────── */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 1rem;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    .status-badge.em-analise {
+      background: var(--warning-light);
+      color: #b45309;
+    }
+
+    .status-badge.resolvido {
+      background: var(--success-light);
+      color: #047857;
+    }
+
+    .status-badge.negado {
+      background: var(--danger-light);
+      color: #b91c1c;
+    }
+
+    .status-badge.aguardando {
+      background: var(--blue-light);
+      color: #1d4ed8;
+    }
+
+    .status-badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+      animation: pulseDot 2s ease-in-out infinite;
+    }
+
+    .em-analise .status-badge-dot { background: #f59e0b; }
+    .resolvido .status-badge-dot { background: var(--success); animation: none; }
+    .negado .status-badge-dot { background: var(--danger); animation: none; }
+    .aguardando .status-badge-dot { background: var(--blue); }
+
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    /* ── Protocol Header ───────────────── */
+    .protocol-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.75rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .protocol-number {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--navy);
+      letter-spacing: -0.3px;
+      font-family: 'Plus Jakarta Sans', monospace;
+    }
+
+    /* ── Detail Grid ───────────────────── */
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .detail-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .detail-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .detail-value {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    /* ── Description ───────────────────── */
+    .description-text {
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: var(--text);
+      background: var(--bg-warm);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      border-left: 3px solid var(--accent);
+      margin-top: 1.25rem;
+    }
+
+    /* ── Attachment Card ────────────────── */
+    .attachment-card {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.25rem;
+      background: var(--bg-warm);
+      border-radius: 12px;
+      border: 1.5px solid var(--border);
+      margin-top: 1.25rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .attachment-card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 2px 8px rgba(249, 115, 22, 0.1);
+    }
+
+    .attachment-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: rgba(239, 68, 68, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .attachment-icon i {
+      font-size: 1.35rem;
+      color: #ef4444;
+    }
+
+    .attachment-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .attachment-name {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .attachment-size {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .attachment-download {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--accent-light);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .attachment-download:hover {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(249, 115, 22, 0.3);
+    }
+
+    /* ── Timeline ──────────────────────── */
+    .timeline {
+      position: relative;
+      padding: 0;
+      list-style: none;
+      margin: 0;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 15px;
+      top: 8px;
+      bottom: 8px;
+      width: 2.5px;
+      background: linear-gradient(to bottom, var(--border) 0%, var(--border) 100%);
+      border-radius: 2px;
+    }
+
+    .timeline-item {
+      position: relative;
+      padding-left: 48px;
+      padding-bottom: 1.75rem;
+    }
+
+    .timeline-item:last-child {
+      padding-bottom: 0;
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: 6px;
+      top: 4px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 3px solid var(--bg-white);
+      box-shadow: 0 0 0 2.5px currentColor;
+      z-index: 2;
+    }
+
+    .timeline-dot.green {
+      background: var(--success);
+      color: var(--success);
+    }
+
+    .timeline-dot.blue {
+      background: var(--blue);
+      color: var(--blue);
+    }
+
+    .timeline-dot.orange {
+      background: var(--warning);
+      color: var(--warning);
+    }
+
+    .timeline-dot.red {
+      background: var(--danger);
+      color: var(--danger);
+    }
+
+    .timeline-date {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 0.25rem;
+      letter-spacing: 0.01em;
+    }
+
+    .timeline-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.2rem;
+    }
+
+    .timeline-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* ── Info Box ───────────────────────── */
+    .info-box {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1.25rem 1.5rem;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.06), rgba(59, 130, 246, 0.03));
+      border: 1.5px solid rgba(59, 130, 246, 0.15);
+      border-radius: 14px;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeInUp 0.5s ease 0.33s forwards;
+    }
+
+    .info-box-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: rgba(59, 130, 246, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .info-box-icon i {
+      font-size: 1.2rem;
+      color: var(--blue);
+    }
+
+    .info-box-text {
+      font-size: 0.92rem;
+      color: var(--text);
+      line-height: 1.6;
+      font-weight: 500;
+    }
+
+    .info-box-text strong {
+      font-weight: 700;
+    }
+
+    /* ── Buttons ────────────────────────── */
+    .btn-back {
+      color: var(--text-muted);
+      border: 1.5px solid var(--border);
+      padding: 0.75rem 1.75rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+      background: var(--bg-white);
+      border-radius: 12px;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-back:hover {
+      background-color: #f1f5f9;
+      border-color: #cbd5e1;
+      color: var(--text);
+    }
+
+    .btn-cancel-request {
+      color: var(--danger);
+      border: 1.5px solid rgba(239, 68, 68, 0.3);
+      padding: 0.75rem 1.75rem;
+      font-weight: 700;
+      font-size: 0.95rem;
+      background: var(--bg-white);
+      border-radius: 12px;
+      transition: all 0.25s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+    }
+
+    .btn-cancel-request:hover {
+      background: var(--danger);
+      border-color: var(--danger);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(239, 68, 68, 0.3);
+      transform: translateY(-1px);
+    }
+
+    .btn-cancel-request:active {
+      transform: translateY(0);
+    }
+
+    /* ── Footer ─────────────────────────── */
+    .app-footer {
+      background: var(--navy);
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.875rem;
+      margin-top: 3rem;
+    }
+
+    .app-footer a {
+      color: rgba(255, 255, 255, 0.75);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .app-footer a:hover {
+      color: var(--accent);
+    }
+
+    /* ── Cancel Modal ──────────────────── */
+    .modal-content {
+      border: none;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    }
+
+    .modal-header {
+      border-bottom: 1px solid var(--border);
+      padding: 1.5rem 1.75rem 1.25rem;
+    }
+
+    .modal-title {
+      font-weight: 800;
+      font-size: 1.15rem;
+      color: var(--text);
+    }
+
+    .modal-body {
+      padding: 1.5rem 1.75rem;
+    }
+
+    .modal-footer {
+      border-top: 1px solid var(--border);
+      padding: 1rem 1.75rem 1.25rem;
+      gap: 0.75rem;
+    }
+
+    .modal-icon-danger {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--danger-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+    }
+
+    .modal-icon-danger i {
+      font-size: 1.5rem;
+      color: var(--danger);
+    }
+
+    .btn-modal-cancel {
+      color: var(--text-muted);
+      border: 1.5px solid var(--border);
+      padding: 0.65rem 1.5rem;
+      font-weight: 600;
+      font-size: 0.92rem;
+      background: var(--bg-white);
+      border-radius: 10px;
+      transition: all 0.2s;
+    }
+
+    .btn-modal-cancel:hover {
+      background: #f1f5f9;
+      color: var(--text);
+    }
+
+    .btn-modal-confirm {
+      background: var(--danger);
+      border: none;
+      color: #fff;
+      padding: 0.65rem 1.5rem;
+      font-weight: 700;
+      font-size: 0.92rem;
+      border-radius: 10px;
+      transition: all 0.2s;
+    }
+
+    .btn-modal-confirm:hover {
+      background: #dc2626;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.35);
+      color: #fff;
+    }
+
+    /* ── Responsive ─────────────────────── */
+    @media (min-width: 768px) {
+      .page-header {
+        padding: 2.5rem 0 2rem;
+      }
+      .page-header h1 {
+        font-size: 1.85rem;
+      }
+      .page-header-icon {
+        width: 72px;
+        height: 72px;
+        border-radius: 22px;
+      }
+      .page-header-icon i {
+        font-size: 2rem;
+      }
+      .detail-card .card-body {
+        padding: 2rem;
+      }
+    }
+
+    @media (max-width: 575px) {
+      .page-header-inner {
+        flex-direction: column;
+        text-align: center;
+      }
+      .protocol-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .detail-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .btn-actions {
+        flex-direction: column-reverse;
+      }
+      .btn-actions .btn,
+      .btn-actions a {
+        width: 100%;
+        justify-content: center;
+      }
+      .detail-card .card-body {
+        padding: 1.25rem;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .detail-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-custom sticky-top">
+  <div class="container">
+    <a class="navbar-brand" href="index.html">
+      <svg width="32" height="32" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="40" height="40" rx="10" fill="#fff" stroke="#1e3a5f" stroke-width="1.5"/>
+  <rect x="9" y="9" width="16" height="4" rx="2" fill="#f97316"/>
+  <rect x="9" y="16" width="22" height="4" rx="2" fill="#3b82f6"/>
+  <rect x="9" y="23" width="22" height="4" rx="2" fill="#10b981"/>
+  <rect x="9" y="30" width="14" height="4" rx="2" fill="#1e3a5f"/>
+</svg>
+      <span class="logo-text"><span style="font-family:Georgia,'Times New Roman',serif;font-style:italic;">Delibera<span style="color:#f97316;font-style:normal;">.</span></span></span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Alternar navegação">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="index.html">Início</a></li>
+        <li class="nav-item"><a class="nav-link" href="nova-solicitacao.html">Nova Solicitação</a></li>
+        <li class="nav-item"><a class="nav-link active" href="acompanhar.html">Acompanhar</a></li>
+        <li class="nav-item"><a class="nav-link" href="planos.html">Planos</a></li>
+        <li class="nav-item"><a class="nav-link" href="sobre.html">Sobre</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Breadcrumb -->
+<div class="breadcrumb-bar">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="acompanhar.html">Minhas Solicitações</a></li>
+        <li class="breadcrumb-item active" aria-current="page">DEL-2026-048721</li>
+      </ol>
+    </nav>
+  </div>
+</div>
+
+<!-- Page Header -->
+<div class="page-header">
+  <div class="container">
+    <div class="page-header-inner">
+      <div class="page-header-icon">
+        <i class="bi bi-file-earmark-text"></i>
+      </div>
+      <div>
+        <h1>Detalhes da Solicitação</h1>
+        <p>Acompanhe o andamento e o histórico da sua solicitação</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Content -->
+<div class="container py-4">
+
+  <!-- Request Details Card -->
+  <div class="detail-card">
+    <div class="card-body">
+
+      <!-- Protocol + Status -->
+      <div class="protocol-header">
+        <div>
+          <span class="protocol-number">DEL-2026-048721</span>
+        </div>
+        <span class="status-badge em-analise">
+          <span class="status-badge-dot"></span>
+          Em análise
+        </span>
+      </div>
+
+      <!-- Card Title -->
+      <div class="card-title-row">
+        <div class="card-title-icon orange">
+          <i class="bi bi-clipboard-data"></i>
+        </div>
+        <h2 class="card-title-text">Informações da Solicitação</h2>
+      </div>
+
+      <!-- Detail Grid -->
+      <div class="detail-grid">
+        <div class="detail-item">
+          <span class="detail-label">Tipo</span>
+          <span class="detail-value">Segunda chamada de prova</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Disciplina</span>
+          <span class="detail-value">Algoritmos</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Turma</span>
+          <span class="detail-value">3o A</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Curso</span>
+          <span class="detail-value">Análise e Desenvolvimento de Sistemas</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Data do envio</span>
+          <span class="detail-value">15/04/2026 às 14:32</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Data relacionada</span>
+          <span class="detail-value">12/04/2026 <span style="color: var(--text-muted); font-weight: 400; font-size: 0.82rem;">(data da prova)</span></span>
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div class="description-text">
+        Não pude comparecer a prova de Algoritmos do dia 12/04 por motivo de saúde. Estive com quadro de virose confirmado por atestado médico. Solicito a aplicação de segunda chamada conforme regulamento institucional.
+      </div>
+
+      <!-- Attachment -->
+      <div class="attachment-card">
+        <div class="attachment-icon">
+          <i class="bi bi-file-earmark-pdf-fill"></i>
+        </div>
+        <div class="attachment-info">
+          <div class="attachment-name">atestado_médico.pdf</div>
+          <div class="attachment-size">PDF &mdash; 245 KB</div>
+        </div>
+        <button class="attachment-download" title="Baixar anexo" aria-label="Baixar atestado_médico.pdf">
+          <i class="bi bi-download"></i>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Timeline Card -->
+  <div class="detail-card">
+    <div class="card-body">
+
+      <div class="card-title-row">
+        <div class="card-title-icon blue">
+          <i class="bi bi-clock-history"></i>
+        </div>
+        <h2 class="card-title-text">Histórico</h2>
+      </div>
+
+      <ol class="timeline">
+        <!-- Event 3 — most recent first visually but chronological order bottom-to-top -->
+        <li class="timeline-item">
+          <div class="timeline-dot orange"></div>
+          <div class="timeline-date">16/04/2026 às 09:10</div>
+          <div class="timeline-title">Em análise</div>
+          <div class="timeline-desc">Coordenador Prof. João Silva iniciou a análise da solicitação.</div>
+        </li>
+        <li class="timeline-item">
+          <div class="timeline-dot blue"></div>
+          <div class="timeline-date">15/04/2026 às 16:45</div>
+          <div class="timeline-title">Recebida pela coordenação</div>
+          <div class="timeline-desc">A solicitação foi encaminhada para análise da coordenação do curso.</div>
+        </li>
+        <li class="timeline-item">
+          <div class="timeline-dot green"></div>
+          <div class="timeline-date">15/04/2026 às 14:32</div>
+          <div class="timeline-title">Solicitação criada</div>
+          <div class="timeline-desc">Solicitação registrada por Mariana Silva.</div>
+        </li>
+      </ol>
+
+    </div>
+  </div>
+
+  <!-- Info Box -->
+  <div class="info-box">
+    <div class="info-box-icon">
+      <i class="bi bi-info-circle-fill"></i>
+    </div>
+    <div class="info-box-text">
+      <strong>Sua solicitação está sendo analisada.</strong> Você receberá uma notificação por e-mail quando houver atualização no status.
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mt-2 mb-4 btn-actions">
+    <a href="acompanhar.html" class="btn btn-back">
+      <i class="bi bi-arrow-left"></i> Voltar
+    </a>
+    <button type="button" class="btn btn-cancel-request" data-bs-toggle="modal" data-bs-target="#cancelModal">
+      <i class="bi bi-x-circle"></i> Cancelar solicitação
+    </button>
+  </div>
+
+</div>
+
+<!-- Cancel Confirmation Modal -->
+<div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="cancelModalLabel">Cancelar Solicitação</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body text-center">
+        <div class="modal-icon-danger">
+          <i class="bi bi-exclamation-triangle-fill"></i>
+        </div>
+        <p style="font-size: 1rem; font-weight: 600; color: var(--text); margin-bottom: 0.5rem;">
+          Tem certeza que deseja cancelar esta solicitação?
+        </p>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0;">
+          O protocolo <strong>DEL-2026-048721</strong> será cancelado permanentemente. Essa acao não pode ser desfeita.
+        </p>
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-modal-cancel" data-bs-dismiss="modal">Nao, manter</button>
+        <button type="button" class="btn btn-modal-confirm" id="btnConfirmCancel">Sim, cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="app-footer">
+  <p class="mb-2">Delibera &copy; 2026 &mdash; Gestão de solicitações acadêmicas</p>
+  <p class="mb-0">
+    <a href="termos.html" class="me-3">Termos de Uso</a>
+    <a href="privacidade.html" class="me-3">Privacidade</a>
+    <a href="sobre.html" class="me-3">Sobre</a>
+    <a href="suporte.html">Suporte</a>
+  </p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Cancel confirmation handler
+  document.getElementById('btnConfirmCancel').addEventListener('click', function() {
+    var modal = bootstrap.Modal.getInstance(document.getElementById('cancelModal'));
+    modal.hide();
+    // In production, this would POST to the server
+    // For mockup, redirect back to tracking page
+    window.location.href = 'acompanhar.html';
+  });
+</script>
+  <script src="tour.js"></script>
+</body>
+</html>

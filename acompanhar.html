@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Minhas Solicitações - Delibera</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%23fff' stroke='%231e3a5f' stroke-width='2'/%3E%3Crect x='9' y='9' width='16' height='4' rx='2' fill='%23f97316'/%3E%3Crect x='9' y='16' width='22' height='4' rx='2' fill='%233b82f6'/%3E%3Crect x='9' y='23' width='22' height='4' rx='2' fill='%2310b981'/%3E%3Crect x='9' y='30' width='14' height='4' rx='2' fill='%231e3a5f'/%3E%3C/svg%3E">
+  <meta property="og:title" content="Delibera - Minhas Solicitações">
+  <meta property="og:description" content="Acompanhe o status das suas solicitações acadêmicas em tempo real.">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+  <style>
+    :root {
+      --navy: #1e3a5f;
+      --navy-dark: #0f2b4a;
+      --accent: #f97316;
+      --accent-hover: #ea580c;
+      --accent-light: rgba(249, 115, 22, 0.08);
+      --blue: #3b82f6;
+      --blue-light: rgba(59, 130, 246, 0.08);
+      --success: #10b981;
+      --success-light: rgba(16, 185, 129, 0.08);
+      --danger: #ef4444;
+      --danger-light: rgba(239, 68, 68, 0.08);
+      --warning: #f59e0b;
+      --warning-light: rgba(245, 158, 11, 0.08);
+      --bg-white: #ffffff;
+      --bg-warm: #faf8f6;
+      --bg-gray: #f1f5f9;
+      --border: #e2e8f0;
+      --text: #1e293b;
+      --text-muted: #64748b;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg-warm);
+      color: var(--text);
+      margin: 0;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Navbar ──────────────────────────── */
+    .navbar-delibera {
+      background: var(--bg-white);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+      padding: 0.75rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .navbar-delibera .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 800;
+      font-size: 1.35rem;
+      color: var(--navy);
+      text-decoration: none;
+    }
+
+    .navbar-delibera .nav-link {
+      color: var(--text-muted);
+      font-weight: 500;
+      font-size: 0.95rem;
+      padding: 0.5rem 1rem !important;
+      transition: color 0.2s, background 0.2s;
+      border-radius: 8px;
+    }
+
+    .navbar-delibera .nav-link:hover {
+      color: var(--text);
+      background: rgba(0, 0, 0, 0.04);
+    }
+
+    .navbar-delibera .nav-link.active {
+      color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .navbar-delibera .navbar-toggler {
+      border: 1.5px solid var(--border);
+      padding: 0.35rem 0.6rem;
+    }
+
+    .navbar-delibera .navbar-toggler-icon {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%2364748b' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    }
+
+    /* ── Page Header ────────────────────── */
+    .page-header {
+      background: linear-gradient(135deg, #ffffff 0%, #fff7ed 50%, #fff3e6 100%);
+      padding: 2.5rem 0 2rem;
+      border-bottom: 1px solid rgba(249, 115, 22, 0.1);
+    }
+
+    .page-header-inner {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .page-header-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(249, 115, 22, 0.12), rgba(249, 115, 22, 0.06));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .page-header-icon i {
+      font-size: 1.75rem;
+      color: var(--accent);
+    }
+
+    .page-header h1 {
+      font-size: 1.65rem;
+      font-weight: 800;
+      color: var(--text);
+      margin: 0;
+      letter-spacing: -0.3px;
+    }
+
+    .page-header p {
+      margin: 0.3rem 0 0;
+      font-size: 1rem;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    /* ── Filter Bar ─────────────────────── */
+    .filter-bar {
+      background: var(--bg-gray);
+      border-radius: 16px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--border);
+    }
+
+    .filter-bar .form-control,
+    .filter-bar .form-select {
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text);
+      background: var(--bg-white);
+      padding: 0.6rem 1rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      font-family: inherit;
+    }
+
+    .filter-bar .form-control:focus,
+    .filter-bar .form-select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+      outline: none;
+    }
+
+    .filter-bar .form-control::placeholder {
+      color: #94a3b8;
+      font-weight: 400;
+    }
+
+    .filter-bar .input-group-text {
+      background: var(--bg-white);
+      border: 1.5px solid var(--border);
+      border-right: none;
+      border-radius: 10px 0 0 10px;
+      color: var(--text-muted);
+      font-size: 1rem;
+    }
+
+    .filter-bar .input-group .form-control {
+      border-left: none;
+      border-radius: 0 10px 10px 0;
+    }
+
+    .filter-bar .input-group:focus-within .input-group-text {
+      border-color: var(--accent);
+    }
+
+    .filter-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.4rem;
+    }
+
+    /* ── Results Summary ────────────────── */
+    .results-summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .results-count {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .results-count strong {
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    /* ── Request Cards ──────────────────── */
+    .request-card {
+      background: var(--bg-white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.03);
+      margin-bottom: 1rem;
+      overflow: hidden;
+      border-left: 4px solid transparent;
+      transition: transform 0.2s, box-shadow 0.2s;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeInUp 0.5s ease forwards;
+    }
+
+    .request-card:nth-child(1) { animation-delay: 0.05s; }
+    .request-card:nth-child(2) { animation-delay: 0.1s; }
+    .request-card:nth-child(3) { animation-delay: 0.15s; }
+    .request-card:nth-child(4) { animation-delay: 0.2s; }
+    .request-card:nth-child(5) { animation-delay: 0.25s; }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .request-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06), 0 8px 24px rgba(0, 0, 0, 0.05);
+    }
+
+    .request-card.status-em-analise {
+      border-left-color: var(--warning);
+    }
+
+    .request-card.status-aguardando {
+      border-left-color: var(--blue);
+    }
+
+    .request-card.status-resolvido {
+      border-left-color: var(--success);
+    }
+
+    .request-card.status-negado {
+      border-left-color: var(--danger);
+    }
+
+    .request-card.status-cancelada {
+      border-left-color: #94a3b8;
+    }
+
+    .request-card-body {
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .request-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .request-icon i {
+      font-size: 1.25rem;
+    }
+
+    .request-icon.icon-warning {
+      background: var(--warning-light);
+      color: var(--warning);
+    }
+
+    .request-icon.icon-blue {
+      background: var(--blue-light);
+      color: var(--blue);
+    }
+
+    .request-icon.icon-success {
+      background: var(--success-light);
+      color: var(--success);
+    }
+
+    .request-icon.icon-danger {
+      background: var(--danger-light);
+      color: var(--danger);
+    }
+
+    .request-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .request-protocol {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      font-family: 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
+      letter-spacing: 0.02em;
+    }
+
+    .request-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin: 0.15rem 0 0.35rem;
+      line-height: 1.3;
+    }
+
+    .request-meta {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.25rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .request-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .request-meta-item i {
+      font-size: 0.85rem;
+      opacity: 0.7;
+    }
+
+    .request-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.75rem;
+      flex-shrink: 0;
+    }
+
+    /* ── Status Badges ──────────────────── */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0.35rem 0.85rem;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .status-badge i {
+      font-size: 0.7rem;
+    }
+
+    .badge-em-analise {
+      background: var(--warning-light);
+      color: #b45309;
+    }
+
+    .badge-aguardando {
+      background: var(--blue-light);
+      color: #1d4ed8;
+    }
+
+    .badge-resolvido {
+      background: var(--success-light);
+      color: #047857;
+    }
+
+    .badge-negado {
+      background: var(--danger-light);
+      color: #b91c1c;
+    }
+
+    .badge-cancelada {
+      background: rgba(148, 163, 184, 0.12);
+      color: #475569;
+    }
+
+    /* ── Ver Detalhes Button ────────────── */
+    .btn-detalhes {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--accent);
+      background: none;
+      border: 1.5px solid var(--accent);
+      padding: 0.4rem 1rem;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s, transform 0.15s;
+      white-space: nowrap;
+    }
+
+    .btn-detalhes:hover {
+      background: var(--accent);
+      color: #fff;
+      transform: translateY(-1px);
+    }
+
+    .btn-detalhes i {
+      font-size: 0.8rem;
+      transition: transform 0.2s;
+    }
+
+    .btn-detalhes:hover i {
+      transform: translateX(2px);
+    }
+
+    /* ── Nova Solicitação Button ─────────── */
+    .btn-nova {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #fff;
+      background: var(--accent);
+      border: none;
+      padding: 0.65rem 1.5rem;
+      border-radius: 12px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 2px 8px rgba(249, 115, 22, 0.25);
+    }
+
+    .btn-nova:hover {
+      background: var(--accent-hover);
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(249, 115, 22, 0.35);
+    }
+
+    /* ── FAB (Floating Action Button) ──── */
+    .fab-nova {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      box-shadow: 0 4px 14px rgba(249, 115, 22, 0.4);
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      text-decoration: none;
+      z-index: 900;
+    }
+
+    .fab-nova:hover {
+      background: var(--accent-hover);
+      color: #fff;
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 6px 20px rgba(249, 115, 22, 0.5);
+    }
+
+    @media (min-width: 768px) {
+      .fab-nova {
+        display: none;
+      }
+    }
+
+    /* ── Empty Staté ────────────────────── */
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      background: var(--bg-white);
+      border: 2px dashed var(--border);
+      border-radius: 16px;
+    }
+
+    .empty-state-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 24px;
+      background: var(--accent-light);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+    }
+
+    .empty-state-icon i {
+      font-size: 2rem;
+      color: var(--accent);
+    }
+
+    .empty-state h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .empty-state p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      max-width: 360px;
+      margin: 0 auto 1.5rem;
+      line-height: 1.6;
+    }
+
+    /* ── Footer ──────────────────────────── */
+    .footer {
+      background: var(--navy-dark);
+      color: rgba(255, 255, 255, 0.7);
+      padding: 4rem 0 2rem;
+      margin-top: auto;
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 800;
+      font-size: 1.25rem;
+      color: #fff;
+      margin-bottom: 0.75rem;
+    }
+
+    .footer-desc {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.5);
+      max-width: 280px;
+      line-height: 1.6;
+    }
+
+    .footer h6 {
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 1rem;
+    }
+
+    .footer ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .footer li {
+      margin-bottom: 0.5rem;
+    }
+
+    .footer a {
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+
+    .footer a:hover {
+      color: var(--accent);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 1.5rem;
+      margin-top: 3rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .footer-bottom-text {
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    /* ── Responsive ─────────────────────── */
+    @media (max-width: 991px) {
+      .page-header h1 {
+        font-size: 1.4rem;
+      }
+    }
+
+    @media (max-width: 767px) {
+      .page-header {
+        padding: 2rem 0 1.5rem;
+      }
+
+      .page-header-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 16px;
+      }
+
+      .page-header-icon i {
+        font-size: 1.4rem;
+      }
+
+      .page-header h1 {
+        font-size: 1.25rem;
+      }
+
+      .filter-bar {
+        padding: 1rem;
+      }
+
+      .request-card-body {
+        flex-wrap: wrap;
+        padding: 1rem 1.15rem;
+      }
+
+      .request-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+      }
+
+      .request-icon i {
+        font-size: 1.1rem;
+      }
+
+      .request-info {
+        flex-basis: calc(100% - 56px);
+      }
+
+      .request-right {
+        flex-basis: 100%;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 0.75rem;
+        border-top: 1px solid var(--border);
+        margin-top: 0.25rem;
+      }
+
+      .request-title {
+        font-size: 0.95rem;
+      }
+    }
+
+    @media (max-width: 575px) {
+      .page-header-inner {
+        gap: 1rem;
+      }
+
+      .request-meta {
+        font-size: 0.8rem;
+        gap: 0.4rem 0.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════ NAVBAR ═══════════════ -->
+  <nav class="navbar navbar-expand-lg navbar-delibera">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">
+        <svg width="34" height="34" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="40" height="40" rx="10" fill="#fff" stroke="#1e3a5f" stroke-width="1.5"/>
+  <rect x="9" y="9" width="16" height="4" rx="2" fill="#f97316"/>
+  <rect x="9" y="16" width="22" height="4" rx="2" fill="#3b82f6"/>
+  <rect x="9" y="23" width="22" height="4" rx="2" fill="#10b981"/>
+  <rect x="9" y="30" width="14" height="4" rx="2" fill="#1e3a5f"/>
+</svg>
+        <span style="font-family:Georgia,'Times New Roman',serif;font-style:italic;">Delibera<span style="color:#f97316;font-style:normal;">.</span></span>
+      </a>
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMain" aria-controls="navMain" aria-expanded="false" aria-label="Menu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMain">
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
+          <li class="nav-item"><a class="nav-link" href="index.html">Início</a></li>
+          <li class="nav-item"><a class="nav-link" href="nova-solicitacao.html">Nova Solicitação</a></li>
+          <li class="nav-item"><a class="nav-link active" href="acompanhar.html">Acompanhar</a></li>
+          <li class="nav-item"><a class="nav-link" href="planos.html">Planos</a></li>
+          <li class="nav-item"><a class="nav-link" href="sobre.html">Sobre</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══════════════ PAGE HEADER ═══════════════ -->
+  <section class="page-header">
+    <div class="container">
+      <div class="page-header-inner">
+        <div class="page-header-icon">
+          <i class="bi bi-list-check"></i>
+        </div>
+        <div>
+          <h1>Minhas Solicitações</h1>
+          <p>Acompanhe o status das suas solicitações acadêmicas</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ MAIN CONTENT ═══════════════ -->
+  <main class="py-4" style="flex: 1;">
+    <div class="container">
+
+      <!-- Filter Bar -->
+      <div class="filter-bar">
+        <div class="row g-3 align-items-end">
+          <div class="col-lg-5 col-md-12">
+            <div class="filter-label">Buscar por protocolo</div>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-search"></i></span>
+              <input type="text" class="form-control" id="searchInput" placeholder="Ex: DEL-2026-048721">
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 col-6">
+            <div class="filter-label">Tipo</div>
+            <select class="form-select" id="filterTipo">
+              <option value="">Todas</option>
+              <option value="segunda-chamada">Segunda chamada</option>
+              <option value="abono-falta">Abono de falta</option>
+              <option value="retificacao-nota">Retificação de nota</option>
+            </select>
+          </div>
+          <div class="col-lg-3 col-md-6 col-6">
+            <div class="filter-label">Status</div>
+            <select class="form-select" id="filterStatus">
+              <option value="">Todos</option>
+              <option value="em-analise">Em análise</option>
+              <option value="aguardando">Aguardando professor</option>
+              <option value="resolvido">Resolvido</option>
+              <option value="negado">Negado</option>
+              <option value="cancelada">Cancelada</option>
+            </select>
+          </div>
+          <div class="col-lg-1 col-md-12 d-none d-lg-block">
+            <button type="button" class="btn w-100" style="background: var(--accent-light); color: var(--accent); font-weight: 700; border-radius: 10px; padding: 0.6rem; border: 1.5px solid transparent; transition: all 0.2s;" onclick="clearFilters()" title="Limpar filtros">
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results Summary -->
+      <div class="results-summary">
+        <span class="results-count" id="resultsCount">Exibindo <strong>5</strong> solicitações</span>
+        <a href="nova-solicitacao.html" class="btn-nova d-none d-md-inline-flex">
+          <i class="bi bi-plus-lg"></i>
+          Nova Solicitação
+        </a>
+      </div>
+
+      <!-- Request Cards -->
+      <div id="requestsList">
+
+        <!-- Card 1 — Em análise -->
+        <div class="request-card status-em-analise" data-tipo="segunda-chamada" data-status="em-analise" data-search="del-2026-048721 segunda chamada algoritmos">
+          <div class="request-card-body">
+            <div class="request-icon icon-warning">
+              <i class="bi bi-clock-history"></i>
+            </div>
+            <div class="request-info">
+              <div class="request-protocol">DEL-2026-048721</div>
+              <div class="request-title">Segunda chamada de prova</div>
+              <div style="font-size:0.82rem;font-weight:600;color:var(--accent);margin-top:0.15rem;"><i class="bi bi-clock me-1"></i>Resposta esperada até 18/04/2026</div>
+              <div class="request-meta">
+                <span class="request-meta-item">
+                  <i class="bi bi-book"></i>
+                  Algoritmos
+                </span>
+                <span class="request-meta-item">
+                  <i class="bi bi-calendar3"></i>
+                  15/04/2026
+                </span>
+              </div>
+            </div>
+            <div class="request-right">
+              <span class="status-badge badge-em-analise">
+                <i class="bi bi-circle-fill"></i>
+                Em análise
+              </span>
+              <a href="status-solicitacao.html" class="btn-detalhes">
+                Ver detalhes
+                <i class="bi bi-arrow-right"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2 — Aguardando professor -->
+        <div class="request-card status-aguardando" data-tipo="abono-falta" data-status="aguardando" data-search="del-2026-047133 abono falta banco de dados">
+          <div class="request-card-body">
+            <div class="request-icon icon-blue">
+              <i class="bi bi-person-check"></i>
+            </div>
+            <div class="request-info">
+              <div class="request-protocol">DEL-2026-047133</div>
+              <div class="request-title">Abono de falta</div>
+              <div style="font-size:0.82rem;font-weight:600;color:var(--blue);margin-top:0.15rem;"><i class="bi bi-clock me-1"></i>Resposta esperada até 15/04/2026</div>
+              <div class="request-meta">
+                <span class="request-meta-item">
+                  <i class="bi bi-book"></i>
+                  Banco de Dados
+                </span>
+                <span class="request-meta-item">
+                  <i class="bi bi-calendar3"></i>
+                  10/04/2026
+                </span>
+              </div>
+            </div>
+            <div class="request-right">
+              <span class="status-badge badge-aguardando">
+                <i class="bi bi-circle-fill"></i>
+                Aguardando professor
+              </span>
+              <a href="status-solicitacao.html" class="btn-detalhes">
+                Ver detalhes
+                <i class="bi bi-arrow-right"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3 — Resolvido (Deferido) -->
+        <div class="request-card status-resolvido" data-tipo="retificacao-nota" data-status="resolvido" data-search="del-2026-045892 retificacao nota engenharia de software">
+          <div class="request-card-body">
+            <div class="request-icon icon-success">
+              <i class="bi bi-check-circle"></i>
+            </div>
+            <div class="request-info">
+              <div class="request-protocol">DEL-2026-045892</div>
+              <div class="request-title">Retificação de nota</div>
+              <div style="font-size:0.82rem;font-weight:600;color:var(--success);margin-top:0.15rem;"><i class="bi bi-check2-circle me-1"></i>Resolvida em 05/04/2026</div>
+              <div class="request-meta">
+                <span class="request-meta-item">
+                  <i class="bi bi-book"></i>
+                  Engenharia de Software
+                </span>
+                <span class="request-meta-item">
+                  <i class="bi bi-calendar3"></i>
+                  02/04/2026
+                </span>
+              </div>
+            </div>
+            <div class="request-right">
+              <span class="status-badge badge-resolvido">
+                <i class="bi bi-check-circle-fill"></i>
+                Resolvido — Deferido
+              </span>
+              <a href="status-solicitacao.html" class="btn-detalhes">
+                Ver detalhes
+                <i class="bi bi-arrow-right"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4 — Negado -->
+        <div class="request-card status-negado" data-tipo="segunda-chamada" data-status="negado" data-search="del-2026-043210 segunda chamada estrutura de dados">
+          <div class="request-card-body">
+            <div class="request-icon icon-danger">
+              <i class="bi bi-x-circle"></i>
+            </div>
+            <div class="request-info">
+              <div class="request-protocol">DEL-2026-043210</div>
+              <div class="request-title">Segunda chamada de prova</div>
+              <div style="font-size:0.82rem;font-weight:600;color:#ef4444;margin-top:0.15rem;"><i class="bi bi-x-circle me-1"></i>Negada em 28/03/2026</div>
+              <div class="request-meta">
+                <span class="request-meta-item">
+                  <i class="bi bi-book"></i>
+                  Estrutura de Dados
+                </span>
+                <span class="request-meta-item">
+                  <i class="bi bi-calendar3"></i>
+                  25/03/2026
+                </span>
+              </div>
+            </div>
+            <div class="request-right">
+              <span class="status-badge badge-negado">
+                <i class="bi bi-x-circle-fill"></i>
+                Negado
+              </span>
+              <a href="status-solicitacao.html" class="btn-detalhes">
+                Ver detalhes
+                <i class="bi bi-arrow-right"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 5 — Resolvido (Deferido) -->
+        <div class="request-card status-resolvido" data-tipo="abono-falta" data-status="resolvido" data-search="del-2026-041567 abono falta redes de computadores">
+          <div class="request-card-body">
+            <div class="request-icon icon-success">
+              <i class="bi bi-check-circle"></i>
+            </div>
+            <div class="request-info">
+              <div class="request-protocol">DEL-2026-041567</div>
+              <div class="request-title">Abono de falta</div>
+              <div style="font-size:0.82rem;font-weight:600;color:var(--success);margin-top:0.15rem;"><i class="bi bi-check2-circle me-1"></i>Resolvida em 21/03/2026</div>
+              <div class="request-meta">
+                <span class="request-meta-item">
+                  <i class="bi bi-book"></i>
+                  Redes de Computadores
+                </span>
+                <span class="request-meta-item">
+                  <i class="bi bi-calendar3"></i>
+                  18/03/2026
+                </span>
+              </div>
+            </div>
+            <div class="request-right">
+              <span class="status-badge badge-resolvido">
+                <i class="bi bi-check-circle-fill"></i>
+                Resolvido — Deferido
+              </span>
+              <a href="status-solicitacao.html" class="btn-detalhes">
+                Ver detalhes
+                <i class="bi bi-arrow-right"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Empty Staté (hidden by default) -->
+      <div class="empty-state" id="emptyState" style="display: none;">
+        <div class="empty-state-icon">
+          <i class="bi bi-inbox"></i>
+        </div>
+        <h3>Nenhuma solicitação encontrada</h3>
+        <p>Tente ajustar os filtros ou crie uma nova solicitação para acompanhar por aqui.</p>
+        <a href="nova-solicitacao.html" class="btn-nova">
+          <i class="bi bi-plus-lg"></i>
+          Nova Solicitação
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ═══════════════ FAB MOBILE ═══════════════ -->
+  <a href="nova-solicitacao.html" class="fab-nova" title="Nova Solicitação">
+    <i class="bi bi-plus-lg"></i>
+  </a>
+
+  <!-- ═══════════════ FOOTER ═══════════════ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-4 col-md-6">
+          <div class="footer-brand">
+            <svg width="28" height="28" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="40" height="40" rx="10" fill="#fff" stroke="#1e3a5f" stroke-width="1.5"/>
+  <rect x="9" y="9" width="16" height="4" rx="2" fill="#f97316"/>
+  <rect x="9" y="16" width="22" height="4" rx="2" fill="#3b82f6"/>
+  <rect x="9" y="23" width="22" height="4" rx="2" fill="#10b981"/>
+  <rect x="9" y="30" width="14" height="4" rx="2" fill="#1e3a5f"/>
+</svg>
+            <span style="font-family:Georgia,'Times New Roman',serif;font-style:italic;">Delibera<span style="color:#f97316;font-style:normal;">.</span></span>
+          </div>
+          <p class="footer-desc">Gestão de solicitações acadêmicas centralizada, rastreável e sem papel.</p>
+        </div>
+        <div class="col-lg-2 col-md-6 col-6">
+          <h6>Produto</h6>
+          <ul>
+            <li><a href="nova-solicitacao.html">Nova Solicitação</a></li>
+            <li><a href="acompanhar.html">Acompanhar</a></li>
+            <li><a href="planos.html">Planos</a></li>
+            <li><a href="login.html">Entrar</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-2 col-md-6 col-6">
+          <h6>Institucional</h6>
+          <ul>
+            <li><a href="sobre.html">Sobre</a></li>
+            <li><a href="suporte.html">Suporte</a></li>
+            <li><a href="termos.html">Termos de Uso</a></li>
+            <li><a href="privacidade.html">Privacidade</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-4 col-md-6">
+          <h6>Contato</h6>
+          <ul>
+            <li><a href="mailto:contato@delibera.com.br"><i class="bi bi-envelope me-2"></i>contato@delibera.com.br</a></li>
+            <li><span style="font-size:0.9rem;"><i class="bi bi-geo-alt me-2"></i>Cuiabá, MT</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span class="footer-bottom-text">&copy; 2026 Delibera. Todos os direitos reservados.</span>
+        <span class="footer-bottom-text">Feito com <i class="bi bi-heart-fill" style="color:var(--accent);"></i> em Cuiabá</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const searchInput = document.getElementById('searchInput');
+    const filterTipo = document.getElementById('filterTipo');
+    const filterStatus = document.getElementById('filterStatus');
+    const requestsList = document.getElementById('requestsList');
+    const emptyState = document.getElementById('emptyState');
+    const resultsCount = document.getElementById('resultsCount');
+
+    function applyFilters() {
+      const searchTerm = searchInput.value.toLowerCase().trim();
+      const tipoValue = filterTipo.value;
+      const statusValue = filterStatus.value;
+      const cards = requestsList.querySelectorAll('.request-card');
+      let visibleCount = 0;
+
+      cards.forEach(card => {
+        const matchesSearch = !searchTerm || card.dataset.search.includes(searchTerm);
+        const matchesTipo = !tipoValue || card.dataset.tipo === tipoValue;
+        const matchesStatus = !statusValue || card.dataset.status === statusValue;
+
+        if (matchesSearch && matchesTipo && matchesStatus) {
+          card.style.display = '';
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      // Toggle empty state
+      if (visibleCount === 0) {
+        requestsList.style.display = 'none';
+        emptyState.style.display = '';
+      } else {
+        requestsList.style.display = '';
+        emptyState.style.display = 'none';
+      }
+
+      // Update count
+      const plural = visibleCount === 1 ? 'solicitação' : 'solicitações';
+      resultsCount.innerHTML = 'Exibindo <strong>' + visibleCount + '</strong> ' + plural;
+    }
+
+    function clearFilters() {
+      searchInput.value = '';
+      filterTipo.value = '';
+      filterStatus.value = '';
+      applyFilters();
+    }
+
+    // Debounce for search input
+    let searchTimeout;
+    searchInput.addEventListener('input', () => {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(applyFilters, 250);
+    });
+
+    filterTipo.addEventListener('change', applyFilters);
+    filterStatus.addEventListener('change', applyFilters);
+  </script>
+  <script src="tour.js"></script>
+</body>
+</html>
