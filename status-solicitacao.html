@@ -445,7 +445,82 @@
       box-shadow: 0 2px 8px rgba(249, 115, 22, 0.3);
     }
 
-    /* ── Timeline ──────────────────────── */
+    /* ── Milestone Timeline ────────────── */
+    .milestone-timeline {
+      position: relative;
+      padding-left: 2rem;
+    }
+
+    .milestone-timeline::before {
+      content: '';
+      position: absolute;
+      left: 11px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: #e2e8f0;
+    }
+
+    .milestone-item {
+      position: relative;
+      padding-bottom: 1.5rem;
+    }
+
+    .milestone-item:last-child {
+      padding-bottom: 0;
+    }
+
+    .milestone-dot {
+      position: absolute;
+      left: -2rem;
+      top: 2px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+    }
+
+    .milestone-dot.completed {
+      background: #f97316;
+      color: #fff;
+    }
+
+    .milestone-dot.current {
+      background: #f97316;
+      color: #fff;
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+
+    .milestone-dot.future {
+      background: #fff;
+      border: 2px solid #e2e8f0;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(249,115,22,0.3); }
+      50% { box-shadow: 0 0 0 6px rgba(249,115,22,0); }
+    }
+
+    .milestone-label {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: #1e293b;
+    }
+
+    .milestone-meta {
+      font-size: 0.8rem;
+      color: #64748b;
+      margin-top: 0.15rem;
+    }
+
+    .milestone-meta.future {
+      font-style: italic;
+    }
+
+    /* ── History Timeline ─────────────── */
     .timeline {
       position: relative;
       padding: 0;
@@ -791,7 +866,7 @@
       <ul class="navbar-nav ms-auto">
         <li class="nav-item"><a class="nav-link" href="index.html">Início</a></li>
         <li class="nav-item"><a class="nav-link" href="nova-solicitacao.html">Nova Solicitação</a></li>
-        <li class="nav-item"><a class="nav-link active" href="acompanhar.html">Acompanhar</a></li>
+        <li class="nav-item"><a class="nav-link active" href="acompanhar.html">Consultar protocolo</a></li>
         <li class="nav-item"><a class="nav-link" href="planos.html">Planos</a></li>
         <li class="nav-item"><a class="nav-link" href="sobre.html">Sobre</a></li>
       </ul>
@@ -804,7 +879,7 @@
   <div class="container">
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="acompanhar.html">Minhas Solicitações</a></li>
+        <li class="breadcrumb-item"><a href="acompanhar.html">Consultar protocolo</a></li>
         <li class="breadcrumb-item active" aria-current="page">DEL-2026-048721</li>
       </ol>
     </nav>
@@ -897,6 +972,51 @@
         <button class="attachment-download" title="Baixar anexo" aria-label="Baixar atestado_médico.pdf">
           <i class="bi bi-download"></i>
         </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Milestone Progress Card -->
+  <div class="detail-card">
+    <div class="card-body">
+
+      <div class="card-title-row">
+        <div class="card-title-icon orange">
+          <i class="bi bi-signpost-split"></i>
+        </div>
+        <h2 class="card-title-text">Progresso</h2>
+      </div>
+
+      <div class="milestone-timeline">
+        <!-- 1. Enviada (completed) -->
+        <div class="milestone-item">
+          <div class="milestone-dot completed">
+            <i class="bi bi-check"></i>
+          </div>
+          <div class="milestone-label">Enviada</div>
+          <div class="milestone-meta">12/abr 14:23 &middot; Mariana Silva</div>
+        </div>
+        <!-- 2. Em análise (current) -->
+        <div class="milestone-item">
+          <div class="milestone-dot current">
+            <i class="bi bi-three-dots"></i>
+          </div>
+          <div class="milestone-label">Em análise</div>
+          <div class="milestone-meta">13/abr 09:00 &middot; Prof. Ribeiro</div>
+        </div>
+        <!-- 3. Decidida (future) -->
+        <div class="milestone-item">
+          <div class="milestone-dot future"></div>
+          <div class="milestone-label" style="color: #94a3b8;">Decidida</div>
+          <div class="milestone-meta future">estimativa 15/abr</div>
+        </div>
+        <!-- 4. Concluída (future) -->
+        <div class="milestone-item">
+          <div class="milestone-dot future"></div>
+          <div class="milestone-label" style="color: #94a3b8;">Concluída</div>
+          <div class="milestone-meta future">&mdash;</div>
+        </div>
       </div>
 
     </div>

@@ -497,7 +497,7 @@
       <ul class="navbar-nav ms-auto">
         <li class="nav-item"><a class="nav-link" href="index.html">Início</a></li>
         <li class="nav-item"><a class="nav-link" href="nova-solicitacao.html">Nova Solicitação</a></li>
-        <li class="nav-item"><a class="nav-link" href="acompanhar.html">Acompanhar</a></li>
+        <li class="nav-item"><a class="nav-link" href="acompanhar.html">Consultar protocolo</a></li>
         <li class="nav-item"><a class="nav-link" href="planos.html">Planos</a></li>
         <li class="nav-item"><a class="nav-link" href="sobre.html">Sobre</a></li>
       </ul>
@@ -522,21 +522,77 @@
         <h1 class="success-title animate-fade-up">Solicitação enviada com sucesso!</h1>
         <p class="success-subtitle animate-fade-up animate-fade-up-1">Sua solicitação foi registrada e está em análise.</p>
 
-        <!-- Protocol Box -->
+        <!-- Protocol Box (herói) -->
         <div class="protocol-box animate-fade-up animate-fade-up-2">
-          <div class="protocol-label">Número do Protocolo</div>
-          <div class="protocol-number" id="protocolNumber">DEL-2026-048721</div>
+          <div class="protocol-label">Seu protocolo</div>
+          <div class="protocol-number" id="protocolNumber" style="font-size:2.5rem;letter-spacing:3px;">DEL-2026-048721</div>
           <div class="protocol-date" id="protocolDate">17/04/2026 às 10:45</div>
-          <button class="copy-btn" id="copyBtn" type="button">
-            <i class="bi bi-clipboard"></i> Copiar protocolo
-          </button>
+
+          <!-- Ações do protocolo -->
+          <div style="display:flex;gap:0.6rem;flex-wrap:wrap;justify-content:center;margin-top:1rem;">
+            <button class="copy-btn" id="copyBtn" type="button" style="flex:none;">
+              <i class="bi bi-clipboard"></i> Copiar
+            </button>
+            <button type="button" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.5rem 1rem;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-white);color:var(--text);font-size:0.85rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.2s;" onclick="window.open('mailto:?subject=Meu protocolo Delibera&body=Meu protocolo: ' + document.getElementById('protocolNumber').textContent)">
+              <i class="bi bi-envelope"></i> Enviar por email
+            </button>
+            <button type="button" id="qrBtn" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.5rem 1rem;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-white);color:var(--text);font-size:0.85rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.2s;">
+              <i class="bi bi-qr-code"></i> QR Code
+            </button>
+          </div>
+
+          <!-- QR Code modal (inline, hidden by default) -->
+          <div id="qrModal" style="display:none;margin-top:1.25rem;padding:1.25rem;background:#f8fafc;border-radius:12px;border:1px solid var(--border);">
+            <div style="text-align:center;">
+              <svg viewBox="0 0 100 100" width="120" height="120" style="margin-bottom:0.5rem;">
+                <rect width="100" height="100" fill="#fff"/>
+                <rect x="5" y="5" width="25" height="25" rx="3" fill="#1e293b"/>
+                <rect x="70" y="5" width="25" height="25" rx="3" fill="#1e293b"/>
+                <rect x="5" y="70" width="25" height="25" rx="3" fill="#1e293b"/>
+                <rect x="10" y="10" width="15" height="15" rx="2" fill="#fff"/>
+                <rect x="75" y="10" width="15" height="15" rx="2" fill="#fff"/>
+                <rect x="10" y="75" width="15" height="15" rx="2" fill="#fff"/>
+                <rect x="13" y="13" width="9" height="9" fill="#1e293b"/>
+                <rect x="78" y="13" width="9" height="9" fill="#1e293b"/>
+                <rect x="13" y="78" width="9" height="9" fill="#1e293b"/>
+                <rect x="35" y="5" width="5" height="5" fill="#1e293b"/><rect x="45" y="5" width="5" height="5" fill="#1e293b"/><rect x="55" y="5" width="5" height="5" fill="#1e293b"/>
+                <rect x="35" y="15" width="5" height="5" fill="#1e293b"/><rect x="50" y="20" width="5" height="5" fill="#1e293b"/>
+                <rect x="35" y="35" width="5" height="5" fill="#1e293b"/><rect x="45" y="40" width="5" height="5" fill="#1e293b"/><rect x="55" y="35" width="5" height="5" fill="#1e293b"/>
+                <rect x="70" y="40" width="5" height="5" fill="#1e293b"/><rect x="80" y="45" width="5" height="5" fill="#1e293b"/><rect x="90" y="40" width="5" height="5" fill="#1e293b"/>
+                <rect x="40" y="50" width="5" height="5" fill="#1e293b"/><rect x="55" y="55" width="5" height="5" fill="#1e293b"/>
+                <rect x="35" y="65" width="5" height="5" fill="#1e293b"/><rect x="50" y="70" width="5" height="5" fill="#1e293b"/><rect x="65" y="75" width="5" height="5" fill="#1e293b"/>
+                <rect x="70" y="70" width="25" height="25" rx="3" stroke="#f97316" stroke-width="2" fill="none"/>
+                <rect x="78" y="78" width="9" height="9" fill="#f97316"/>
+              </svg>
+              <div style="font-size:0.78rem;color:var(--text-muted);">Escaneie para acompanhar esta solicitação</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Próximos passos -->
+        <div style="background:var(--bg-white);border:1px solid var(--border);border-radius:12px;padding:1.25rem 1.5rem;margin-bottom:1.25rem;text-align:left;" class="animate-fade-up animate-fade-up-2">
+          <div style="font-weight:700;font-size:0.92rem;color:var(--text);margin-bottom:0.75rem;"><i class="bi bi-signpost-2 me-2" style="color:var(--accent);"></i>O que acontece agora?</div>
+          <div style="display:flex;flex-direction:column;gap:0.5rem;">
+            <div style="display:flex;align-items:flex-start;gap:0.6rem;font-size:0.88rem;color:var(--text-muted);">
+              <i class="bi bi-check-circle-fill" style="color:var(--success);margin-top:2px;flex-shrink:0;"></i>
+              <span>Solicitação registrada com protocolo único</span>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:0.6rem;font-size:0.88rem;color:var(--text-muted);">
+              <i class="bi bi-circle" style="color:var(--accent);margin-top:2px;flex-shrink:0;"></i>
+              <span><strong style="color:var(--text);">Análise em até 3 dias úteis</strong> — a coordenação vai revisar sua solicitação</span>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:0.6rem;font-size:0.88rem;color:var(--text-muted);">
+              <i class="bi bi-circle" style="color:#cbd5e1;margin-top:2px;flex-shrink:0;"></i>
+              <span>Você será notificado por email a cada mudança de status</span>
+            </div>
+          </div>
         </div>
 
         <!-- Hint -->
         <div class="hint-box animate-fade-up animate-fade-up-2">
           <i class="bi bi-exclamation-triangle-fill" style="color:#f59e0b;"></i>
           <div>
-            <strong>Anote ou salve este número — ele é sua chave de acompanhamento.</strong> Você também receberá uma copia por e-mail. Caso perca o protocolo, pode recupera-lo informando o e-mail cadastrado.
+            <strong>Anote ou salve este número — ele é sua chave de acompanhamento.</strong> Você também receberá uma cópia por e-mail. Caso perca o protocolo, pode recuperá-lo informando o e-mail cadastrado.
           </div>
         </div>
 
@@ -599,7 +655,7 @@
         <!-- Action Buttons -->
         <div class="d-flex flex-wrap justify-content-center gap-3 mb-3 actions-wrap animate-fade-up animate-fade-up-5">
           <a href="status-solicitacao.html" class="btn-primary-action">
-            <i class="bi bi-search"></i> Acompanhar solicitação
+            <i class="bi bi-search"></i> Consultar protocolo
           </a>
           <a href="nova-solicitacao.html" class="btn-outline-action">
             <i class="bi bi-plus-circle"></i> Criar nova solicitação
@@ -735,6 +791,12 @@
         btn.classList.remove('copied');
       }, 2000);
     }
+  });
+
+  // QR Code toggle
+  document.getElementById('qrBtn').addEventListener('click', function() {
+    var modal = document.getElementById('qrModal');
+    modal.style.display = modal.style.display === 'none' ? 'block' : 'none';
   });
 </script>
   <script src="tour.js"></script>

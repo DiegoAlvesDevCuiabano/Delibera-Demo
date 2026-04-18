@@ -900,6 +900,12 @@
       <p>Visão geral das solicitações acadêmicas</p>
     </div>
 
+    <!-- Alerta de urgência -->
+    <div style="background:rgba(249,115,22,0.08);border:1px solid rgba(249,115,22,0.2);border-radius:12px;padding:0.75rem 1.25rem;margin-bottom:1.25rem;display:flex;align-items:center;gap:0.6rem;font-size:0.88rem;color:#92400e;font-weight:600;">
+      <i class="bi bi-exclamation-triangle-fill" style="color:#f97316;font-size:1.1rem;"></i>
+      <span>Você tem <strong>3 solicitações</strong> vencendo o prazo hoje — <a href="analisar-solicitacao.html" style="color:#f97316;text-decoration:underline;">revisar agora</a></span>
+    </div>
+
     <!-- KPI Cards -->
     <div class="kpi-grid">
       <div class="kpi-card kpi-card--orange">
@@ -936,6 +942,137 @@
         <div class="kpi-info">
           <div class="kpi-label">Total do período</div>
           <div class="kpi-value">59</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table: Solicitações Pendentes (INBOX — posição prioritária) -->
+    <div class="card-clean" style="margin-bottom:1.5rem;">
+      <div class="card-header-clean">
+        <h2><i class="bi bi-inbox me-2" style="color:var(--accent);"></i>Solicitações Pendentes</h2>
+      </div>
+
+      <!-- Filter Bar -->
+      <div class="filter-bar">
+        <input type="text" class="filter-input filter-input--search" placeholder="Buscar aluno...">
+        <select class="filter-input">
+          <option value="">Tipo</option>
+          <option>Segunda chamada</option>
+          <option>Abono de falta</option>
+          <option>Retificação de nota</option>
+          <option>Ajuste de presença</option>
+        </select>
+        <select class="filter-input">
+          <option value="">Status</option>
+          <option>Pendente</option>
+          <option>Em análise</option>
+          <option>Aguardando professor</option>
+        </select>
+        <input type="date" class="filter-input">
+        <button class="btn-filter">
+          <i class="bi bi-funnel"></i>
+          Filtrar
+        </button>
+      </div>
+
+      <!-- Table -->
+      <div class="table-responsive-wrap">
+        <table class="table-clean">
+          <thead>
+            <tr>
+              <th>Protocolo</th>
+              <th>Aluno</th>
+              <th>Tipo</th>
+              <th>Data</th>
+              <th>Prazo</th>
+              <th>Status</th>
+              <th style="text-align: right;">Ação</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>#2026-0047</strong></td>
+              <td>
+                <div class="student-cell">
+                  <span class="student-name">Maria Santos</span>
+                  <span class="student-course">Algoritmos — 3º período</span>
+                </div>
+              </td>
+              <td>Segunda chamada</td>
+              <td>12/04/2026</td>
+              <td><span style="color:#ef4444;font-weight:700;font-size:0.82rem;"><i class="bi bi-exclamation-circle me-1"></i>Vence hoje</span></td>
+              <td><span class="badge-status badge-status--pendente"><span class="badge-status--dot"></span> Pendente</span></td>
+              <td style="text-align: right;"><a href="analisar-solicitacao.html" class="btn-analisar">Analisar <i class="bi bi-arrow-right"></i></a></td>
+            </tr>
+            <tr>
+              <td><strong>#2026-0046</strong></td>
+              <td>
+                <div class="student-cell">
+                  <span class="student-name">João Oliveira</span>
+                  <span class="student-course">Banco de Dados — 4º período</span>
+                </div>
+              </td>
+              <td>Abono de falta</td>
+              <td>11/04/2026</td>
+              <td><span style="color:#ef4444;font-weight:700;font-size:0.82rem;"><i class="bi bi-exclamation-circle me-1"></i>Vence hoje</span></td>
+              <td><span class="badge-status badge-status--pendente"><span class="badge-status--dot"></span> Pendente</span></td>
+              <td style="text-align: right;"><a href="analisar-solicitacao.html" class="btn-analisar">Analisar <i class="bi bi-arrow-right"></i></a></td>
+            </tr>
+            <tr>
+              <td><strong>#2026-0045</strong></td>
+              <td>
+                <div class="student-cell">
+                  <span class="student-name">Ana Costa</span>
+                  <span class="student-course">Eng. Software — 5º período</span>
+                </div>
+              </td>
+              <td>Retificação de nota</td>
+              <td>10/04/2026</td>
+              <td><span style="color:#ef4444;font-weight:700;font-size:0.82rem;"><i class="bi bi-exclamation-circle me-1"></i>Atrasado</span></td>
+              <td><span class="badge-status badge-status--pendente"><span class="badge-status--dot"></span> Pendente</span></td>
+              <td style="text-align: right;"><a href="analisar-solicitacao.html" class="btn-analisar">Analisar <i class="bi bi-arrow-right"></i></a></td>
+            </tr>
+            <tr>
+              <td><strong>#2026-0044</strong></td>
+              <td>
+                <div class="student-cell">
+                  <span class="student-name">Pedro Souza</span>
+                  <span class="student-course">Estrutura de Dados — 3º período</span>
+                </div>
+              </td>
+              <td>Segunda chamada</td>
+              <td>09/04/2026</td>
+              <td><span style="color:var(--accent);font-weight:600;font-size:0.82rem;">Amanhã</span></td>
+              <td><span class="badge-status badge-status--pendente"><span class="badge-status--dot"></span> Pendente</span></td>
+              <td style="text-align: right;"><a href="analisar-solicitacao.html" class="btn-analisar">Analisar <i class="bi bi-arrow-right"></i></a></td>
+            </tr>
+            <tr>
+              <td><strong>#2026-0043</strong></td>
+              <td>
+                <div class="student-cell">
+                  <span class="student-name">Carla Lima</span>
+                  <span class="student-course">Redes — 6º período</span>
+                </div>
+              </td>
+              <td>Abono de falta</td>
+              <td>08/04/2026</td>
+              <td><span style="color:var(--text-muted);font-size:0.82rem;">2 dias</span></td>
+              <td><span class="badge-status badge-status--pendente"><span class="badge-status--dot"></span> Pendente</span></td>
+              <td style="text-align: right;"><a href="analisar-solicitacao.html" class="btn-analisar">Analisar <i class="bi bi-arrow-right"></i></a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <div class="table-footer">
+        <span>Mostrando 1-5 de 12 solicitações</span>
+        <div class="pagination-pills">
+          <button disabled><i class="bi bi-chevron-left"></i></button>
+          <button class="active">1</button>
+          <button>2</button>
+          <button>3</button>
+          <button><i class="bi bi-chevron-right"></i></button>
         </div>
       </div>
     </div>
@@ -985,130 +1122,7 @@
       </div>
     </div>
 
-    <!-- Table: Solicitações Pendentes -->
-    <div class="card-clean">
-      <div class="card-header-clean">
-        <h2>Solicitações Pendentes</h2>
-      </div>
-
-      <!-- Filter Bar -->
-      <div class="filter-bar">
-        <input type="text" class="filter-input filter-input--search" placeholder="Buscar aluno...">
-        <select class="filter-input">
-          <option value="">Tipo</option>
-          <option>Segunda chamada</option>
-          <option>Abono de falta</option>
-          <option>Retificação de nota</option>
-          <option>Ajuste de presença</option>
-        </select>
-        <select class="filter-input">
-          <option value="">Status</option>
-          <option>Pendente</option>
-          <option>Em análise</option>
-          <option>Aguardando professor</option>
-        </select>
-        <input type="date" class="filter-input">
-        <button class="btn-filter">
-          <i class="bi bi-funnel"></i>
-          Filtrar
-        </button>
-      </div>
-
-      <!-- Table -->
-      <div class="table-responsive-wrap">
-        <table class="table-clean">
-          <thead>
-            <tr>
-              <th>Protocolo</th>
-              <th>Aluno</th>
-              <th>Tipo</th>
-              <th>Data</th>
-              <th>Status</th>
-              <th style="text-align: right;">Ação</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>#2026-0047</strong></td>
-              <td>
-                <div class="student-cell">
-                  <span class="student-name">Maria Santos</span>
-                  <span class="student-course">Algoritmos — 3º período</span>
-                </div>
-              </td>
-              <td>Segunda chamada</td>
-              <td>12/04/2026</td>
-              <td><span class="badge-status badge-status--pendente"><span class="badge-status--dot"></span> Pendente</span></td>
-              <td style="text-align: right;"><a href="analisar-solicitacao.html" class="btn-analisar">Analisar <i class="bi bi-arrow-right"></i></a></td>
-            </tr>
-            <tr>
-              <td><strong>#2026-0046</strong></td>
-              <td>
-                <div class="student-cell">
-                  <span class="student-name">João Oliveira</span>
-                  <span class="student-course">Banco de Dados — 4º período</span>
-                </div>
-              </td>
-              <td>Abono de falta</td>
-              <td>11/04/2026</td>
-              <td><span class="badge-status badge-status--pendente"><span class="badge-status--dot"></span> Pendente</span></td>
-              <td style="text-align: right;"><a href="analisar-solicitacao.html" class="btn-analisar">Analisar <i class="bi bi-arrow-right"></i></a></td>
-            </tr>
-            <tr>
-              <td><strong>#2026-0045</strong></td>
-              <td>
-                <div class="student-cell">
-                  <span class="student-name">Ana Costa</span>
-                  <span class="student-course">Eng. Software — 5º período</span>
-                </div>
-              </td>
-              <td>Retificação de nota</td>
-              <td>10/04/2026</td>
-              <td><span class="badge-status badge-status--pendente"><span class="badge-status--dot"></span> Pendente</span></td>
-              <td style="text-align: right;"><a href="analisar-solicitacao.html" class="btn-analisar">Analisar <i class="bi bi-arrow-right"></i></a></td>
-            </tr>
-            <tr>
-              <td><strong>#2026-0044</strong></td>
-              <td>
-                <div class="student-cell">
-                  <span class="student-name">Pedro Souza</span>
-                  <span class="student-course">Estrutura de Dados — 3º período</span>
-                </div>
-              </td>
-              <td>Segunda chamada</td>
-              <td>09/04/2026</td>
-              <td><span class="badge-status badge-status--pendente"><span class="badge-status--dot"></span> Pendente</span></td>
-              <td style="text-align: right;"><a href="analisar-solicitacao.html" class="btn-analisar">Analisar <i class="bi bi-arrow-right"></i></a></td>
-            </tr>
-            <tr>
-              <td><strong>#2026-0043</strong></td>
-              <td>
-                <div class="student-cell">
-                  <span class="student-name">Carla Lima</span>
-                  <span class="student-course">Redes — 6º período</span>
-                </div>
-              </td>
-              <td>Abono de falta</td>
-              <td>08/04/2026</td>
-              <td><span class="badge-status badge-status--pendente"><span class="badge-status--dot"></span> Pendente</span></td>
-              <td style="text-align: right;"><a href="analisar-solicitacao.html" class="btn-analisar">Analisar <i class="bi bi-arrow-right"></i></a></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Pagination -->
-      <div class="table-footer">
-        <span>Mostrando 1-5 de 12 solicitações</span>
-        <div class="pagination-pills">
-          <button disabled><i class="bi bi-chevron-left"></i></button>
-          <button class="active">1</button>
-          <button>2</button>
-          <button>3</button>
-          <button><i class="bi bi-chevron-right"></i></button>
-        </div>
-      </div>
-    </div>
+    <!-- (tabela movida para cima — seção removida daqui) -->
 
   </main>
 
