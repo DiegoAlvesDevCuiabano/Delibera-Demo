@@ -1160,7 +1160,10 @@
             <!-- Parecer -->
             <div style="margin-bottom: 1.25rem;">
               <label class="form-label-clean">Parecer da Coordenação</label>
-              <textarea class="form-textarea" placeholder="Escreva o parecer da coordenação..."></textarea>
+              <textarea class="form-textarea" placeholder="Este texto será visível ao aluno na consulta pública. Evite incluir dados pessoais, nomes completos ou informações sensíveis."></textarea>
+              <div style="font-size:0.75rem;color:var(--text-muted);margin-top:0.35rem;display:flex;align-items:center;gap:0.3rem;">
+                <i class="bi bi-eye" style="font-size:0.7rem;"></i> O aluno verá este parecer exatamente como escrito aqui.
+              </div>
             </div>
 
             <!-- Professor Select -->
@@ -1306,7 +1309,7 @@
           setTimeout(function () {
             textarea.style.borderColor = '';
             textarea.style.boxShadow = '';
-            textarea.setAttribute('placeholder', 'Escreva o parecer da coordenação...');
+            textarea.setAttribute('placeholder', 'Este texto será visível ao aluno na consulta pública. Evite incluir dados pessoais, nomes completos ou informações sensíveis.');
           }, 2000);
           return;
         }

@@ -59,7 +59,10 @@
       position: 'top',
       action: function() {
         // Simulate form submission for file:// protocol
-        var protocolo = 'DEL-2026-' + String(Math.floor(Math.random() * 900000) + 100000);
+        var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        var codigo = '';
+        for (var i = 0; i < 8; i++) codigo += chars.charAt(Math.floor(Math.random() * 36));
+        var protocolo = 'DEL-2026-' + codigo;
         var now = new Date().toLocaleString('pt-BR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
         var solicitacao = {
           protocolo: protocolo,
@@ -111,15 +114,15 @@
     },
     {
       page: 'confirmacao-solicitacao.html',
-      selector: 'a[href="status-solicitacao.html"]',
-      text: 'Acompanhe o status da solicitacao',
+      selector: 'a[href="acompanhar.html"]',
+      text: 'Consulte o protocolo com seu email',
       position: 'top'
     },
     {
-      page: 'status-solicitacao.html',
-      selector: 'a[href="acompanhar.html"]',
-      text: 'Veja todas as suas solicitacoes',
-      position: 'top'
+      page: 'acompanhar.html',
+      selector: 'button[type="submit"]',
+      text: 'Informe protocolo + email para consultar',
+      position: 'bottom'
     },
     {
       page: 'acompanhar.html',

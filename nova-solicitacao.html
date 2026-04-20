@@ -667,7 +667,7 @@
                 <input type="file" id="anexo" accept=".pdf,.jpg,.jpeg,.png">
               </div>
               <div class="form-text mt-2" id="anexoHint">
-                Anexe atestado ou comprovante quando aplicável.
+                Anexe atestado ou comprovante quando aplicável. Formatos aceitos: PDF, JPG, PNG. Para arquivos Word, exporte como PDF antes de enviar.
                 <a href="privacidade.html" class="text-decoration-none" style="color:var(--accent);">Saiba mais sobre retenção de dados</a>
               </div>
             </div>
@@ -675,9 +675,20 @@
           </div>
         </div>
 
-        <!-- LGPD notice -->
-        <div style="text-align:center;font-size:0.78rem;color:var(--text-muted);margin-top:1rem;padding:0 1rem;">
-          <i class="bi bi-shield-lock me-1"></i> Seus dados são usados apenas para processar esta solicitação. <a href="privacidade.html" style="color:var(--accent);text-decoration:none;">Política de privacidade</a>
+        <!-- Consentimento LGPD -->
+        <div style="margin-top:1.25rem;padding:1rem 1.25rem;background:var(--bg-warm);border:1px solid var(--border);border-radius:12px;">
+          <div class="form-check" style="display:flex;align-items:flex-start;gap:0.5rem;">
+            <input type="checkbox" class="form-check-input" id="aceiteTermos" name="aceiteTermos" required
+                   style="margin-top:0.25rem;flex-shrink:0;">
+            <label class="form-check-label" for="aceiteTermos" style="font-size:0.85rem;color:var(--text);line-height:1.5;">
+              <i class="bi bi-shield-lock me-1" style="color:var(--accent);"></i>
+              Li e concordo com a
+              <a href="privacidade.html" target="_blank" rel="noopener noreferrer" style="color:var(--accent);text-decoration:none;font-weight:600;">Política de Privacidade</a>
+              e os
+              <a href="termos.html" target="_blank" rel="noopener noreferrer" style="color:var(--accent);text-decoration:none;font-weight:600;">Termos de Uso</a>
+              <span style="color:var(--text-muted);">v1.0</span>
+            </label>
+          </div>
         </div>
 
         <!-- Ações -->
@@ -828,8 +839,10 @@
         localStorage.setItem('delibera-identidade', JSON.stringify(identidade));
 
         var ano = new Date().getFullYear();
-        var numero = String(Math.floor(Math.random() * 900000) + 100000);
-        var protocolo = 'DEL-' + ano + '-' + numero;
+        var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        var codigo = '';
+        for (var i = 0; i < 8; i++) codigo += chars.charAt(Math.floor(Math.random() * 36));
+        var protocolo = 'DEL-' + ano + '-' + codigo;
 
         var solicitacao = {
           protocolo: protocolo,
