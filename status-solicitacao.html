@@ -910,8 +910,11 @@
 
       <!-- Protocol + Status -->
       <div class="protocol-header">
-        <div>
-          <span class="protocol-number">DEL-2026-048721</span>
+        <div style="display:flex;align-items:center;gap:0.75rem;">
+          <span class="protocol-number" id="protocoloText">DEL-2026-048721</span>
+          <button type="button" id="copyProtocolo" style="display:inline-flex;align-items:center;gap:0.3rem;padding:0.3rem 0.75rem;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-white);color:var(--text-muted);font-size:0.78rem;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:inherit;" title="Copiar protocolo">
+            <i class="bi bi-clipboard"></i> Copiar
+          </button>
         </div>
         <span class="status-badge em-analise">
           <span class="status-badge-dot"></span>
@@ -1052,6 +1055,24 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  document.getElementById('copyProtocolo')?.addEventListener('click', function() {
+    var texto = document.getElementById('protocoloText').textContent.trim();
+    var btn = this;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(texto).then(function() {
+        btn.innerHTML = '<i class="bi bi-check-lg"></i> Copiado!';
+        btn.style.borderColor = 'var(--success)';
+        btn.style.color = 'var(--success)';
+        setTimeout(function() {
+          btn.innerHTML = '<i class="bi bi-clipboard"></i> Copiar';
+          btn.style.borderColor = '';
+          btn.style.color = '';
+        }, 2000);
+      });
+    }
+  });
+</script>
   <script src="tour.js"></script>
 </body>
 </html>
