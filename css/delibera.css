@@ -349,6 +349,10 @@ body.bg-warm {
   margin-bottom: 1.5rem;
 }
 
+.hero-eyebrow i {
+  font-size: 1.5rem;
+}
+
 .hero h1 {
   font-size: 3rem;
   font-weight: 800;
